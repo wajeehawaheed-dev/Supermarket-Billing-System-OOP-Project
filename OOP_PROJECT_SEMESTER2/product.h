@@ -6,11 +6,15 @@
 class ProductManager
 {
 private:
-    vector<Product> products;
-    int nextID;
+    Product** products;    //pointer to array of Product pointers
+    int count;             //how many products currently
+    int capacity;          //total allocated size
+
+    void resize();         //doubles capacity when full
 
 public:
     ProductManager();
+    ~ProductManager();     // destructor — must free memory manually
 
     void addProduct(string name, string category, double price, int stock);
     void updateProduct(int id, string name, string category, double price);
@@ -20,7 +24,7 @@ public:
     Product* searchByID(int id);
 
     void decreaseStock(int id, int quantity);   //Member 3 will call this
-    void increaseStock(int id, int quantity);
+    void increaseStock(int id, int q);
     void checkLowStock() const;
 
     void saveToFile() const;

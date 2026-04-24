@@ -59,8 +59,5 @@ void Product::setIsActive(bool status)
 
 //--- ProductManager implementations ---
 
-ProductManager::ProductManager() //remove nextId becuse sql will handle it and it won't even reset everytime program runs
-{ 
-    nextID = 1;
-}
+
 
