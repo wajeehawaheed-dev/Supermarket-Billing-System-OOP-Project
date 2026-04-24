@@ -1,0 +1,92 @@
+#pragma once
+
+using namespace System;
+using namespace System::Data;
+using namespace System::Data::SqlClient;
+
+// ============================================================
+// Supermarket Billing System - Database Helper (C++/CLI)
+// Every module uses these functions to talk to SQL Server.
+// Nobody should open a SqlConnection anywhere else.
+// Owned by Member 5. Request changes via group chat.
+// ============================================================
+
+namespace SBS {
+
+    public ref class Database {
+    public:
+        // Shared connection string. Edit if your SQL Server
+        // instance has a different name.
+        static String^ GetConnectionString() {
+            return "Server=localhost\\SQLEXPRESS;"
+                "Database=SupermarketDB;"
+                "Integrated Security=True;";
+        }
+
+        // For INSERT / UPDATE / DELETE.
+        // Returns rows affected, or -1 on error.
+        static int ExecuteNonQuery(String^ sql) {
+            try {
+                SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
+                conn->Open();
+                SqlCommand^ cmd = gcnew SqlCommand(sql, conn);
+                int rows = cmd->ExecuteNonQuery();
+                conn->Close();
+                return rows;
+            }
+            catch (Exception^ e) {
+                System::Windows::Forms::MessageBox::Show(
+                    "Database error: " + e->Message);
+                return -1;
+            }
+        }
+
+        // For SELECT returning rows. Use as DataGridView->DataSource.
+        static DataTable^ ExecuteQuery(String^ sql) {
+            DataTable^ table = gcnew DataTable();
+            try {
+                SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
+                conn->Open();
+                SqlDataAdapter^ adapter = gcnew SqlDataAdapter(sql, conn);
+                adapter->Fill(table);
+                conn->Close();
+            }
+            catch (Exception^ e) {
+                System::Windows::Forms::MessageBox::Show(
+                    "Database error: " + e->Message);
+            }
+            return table;
+        }
+
+        // For SELECT returning a single value (COUNT, SUM, MAX).
+        static Object^ ExecuteScalar(String^ sql) {
+            Object^ result = nullptr;
+            try {
+                SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
+                conn->Open();
+                SqlCommand^ cmd = gcnew SqlCommand(sql, conn);
+                result = cmd->ExecuteScalar();
+                conn->Close();
+            }
+            catch (Exception^ e) {
+                System::Windows::Forms::MessageBox::Show(
+                    "Database error: " + e->Message);
+            }
+            return result;
+        }
+
+        // Quick check at app startup — is the DB reachable?
+        static bool TestConnection() {
+            try {
+                SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
+                conn->Open();
+                conn->Close();
+                return true;
+            }
+            catch (...) {
+                return false;
+            }
+        }
+    };
+
+}
