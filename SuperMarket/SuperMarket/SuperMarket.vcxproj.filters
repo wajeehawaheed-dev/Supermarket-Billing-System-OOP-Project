@@ -21,12 +21,27 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CartForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Billing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

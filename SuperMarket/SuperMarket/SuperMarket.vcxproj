@@ -118,16 +118,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BillingForm.cpp" />
     <ClCompile Include="CartForm.cpp" />
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Billing.h" />
+    <ClInclude Include="BillingForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Cart.h" />
     <ClInclude Include="CartForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="constants.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BillingForm.resx">
+      <DependentUpon>BillingForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CartForm.resx">
       <DependentUpon>CartForm.h</DependentUpon>
     </EmbeddedResource>

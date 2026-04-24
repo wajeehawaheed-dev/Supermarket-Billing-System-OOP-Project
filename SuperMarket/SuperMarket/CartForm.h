@@ -1,6 +1,7 @@
 #pragma once
 #include "Cart.h"
-
+#include "constants.h"
+#include "BillingForm.h"
 namespace SuperMarket {
 
 	using namespace System;
@@ -41,6 +42,7 @@ namespace SuperMarket {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ btnBilling;
 	private: System::Windows::Forms::Label^ lblSubtotal;
 	private: System::Windows::Forms::Label^ lblDiscount;
 	private: System::Windows::Forms::Label^ lblTax;
@@ -81,6 +83,7 @@ namespace SuperMarket {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->btnBilling = (gcnew System::Windows::Forms::Button());
 			this->lblSubtotal = (gcnew System::Windows::Forms::Label());
 			this->lblDiscount = (gcnew System::Windows::Forms::Label());
 			this->lblTax = (gcnew System::Windows::Forms::Label());
@@ -168,6 +171,10 @@ namespace SuperMarket {
 			this->button3->Text = L"Clear Cart";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &CartForm::button3_Click);
+			this->btnBilling->Location = System::Drawing::Point(510, 570);
+			this->btnBilling->Size = System::Drawing::Size(180, 31);
+			this->btnBilling->Text = L"Proceed to Billing";
+			this->btnBilling->Click += gcnew System::EventHandler(this, &CartForm::btnBilling_Click);
 			this->lblSubtotal->Location = System::Drawing::Point(12, 615);
 			this->lblSubtotal->Size = System::Drawing::Size(300, 30);
 			this->lblSubtotal->Text = L"Subtotal: Rs 0";
@@ -198,6 +205,7 @@ namespace SuperMarket {
 			this->Controls->Add(this->lblTax);
 			this->Controls->Add(this->lblGrandTotal);
 			this->Controls->Add(this->cartGrid);
+			this->Controls->Add(this->btnBilling);
 			this->Name = L"CartForm";
 			this->Text = L"CartForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->cartGrid))->EndInit();
@@ -217,13 +225,13 @@ namespace SuperMarket {
 		}
 		int itemCount = cartGrid->Rows->Count - 1;
 		double discount = 0;
-		if (itemCount >= 10) {
-			discount = subtotal * 0.2;
+		if(itemCount >= DISCOUNT_THRESHOLD_2) {
+			discount = subtotal * DISCOUNT_RATE_2;
 		}
-		else if (itemCount >= 5){
-			discount = subtotal * 0.1;
+		else if(itemCount >= DISCOUNT_THRESHOLD_1) {
+			discount = subtotal * DISCOUNT_RATE_1;
 		}
-		double tax = (subtotal - discount) * 0.17;
+		double tax = (subtotal - discount) * TAX_RATE;
 		double grandTotal = subtotal - discount + tax;
 		lblSubtotal->Text = "Subtotal: Rs " + subtotal.ToString("F2");
 		lblDiscount->Text = "Discount: Rs " + discount.ToString("F2");
@@ -295,6 +303,10 @@ namespace SuperMarket {
 			String^ name = txtName->Text;
 			double total = price * qty;
 			cartGrid->Rows->Add(id, name, price, qty, total);
+			std::string stdName = "";
+			for (int i = 0; i < name->Length; i++)
+				stdName += (char)name[i];
+			cart->addItem(id, stdName, price, qty);
 			UpdateTotals();
 		}
 	}
@@ -317,5 +329,14 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	cartGrid->Rows->Clear();
 	UpdateTotals();
 }
+private: System::Void btnBilling_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (cartGrid->Rows->Count <= 1) {
+		MessageBox::Show("Cart is empty! Please add items before proceeding to billing.", "Warning");
+		return;
+	}
+	BillingForm^ billingForm = gcnew BillingForm(cart);
+	billingForm->ShowDialog();
+}
 };
 }
+
