@@ -1,7 +1,7 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 #include "shared.h"
-#include <vector>
+
 
 class ProductManager
 {
