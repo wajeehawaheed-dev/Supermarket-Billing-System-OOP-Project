@@ -121,9 +121,6 @@
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
-    <ClInclude Include="LoginForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
     <ClInclude Include="session.h" />
     <ClInclude Include="shared.h" />
   </ItemGroup>
@@ -133,15 +130,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="LoginForm.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="LoginForm.resx">
-      <DependentUpon>LoginForm.h</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="schema.sql" />
