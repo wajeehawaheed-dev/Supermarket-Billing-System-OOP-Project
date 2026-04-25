@@ -1,5 +1,7 @@
 #pragma once
-
+#include "AdminDashboardForm.h"
+#include "database.h"
+#include "session.h"
 namespace SUper {
 
 	using namespace System;
@@ -7,6 +9,7 @@ namespace SUper {
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
+	using namespace System::Data::SqlClient;
 	using namespace System::Drawing;
 
 	/// <summary>
@@ -34,14 +37,20 @@ namespace SUper {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ lblHead;
+	protected:
+
 	protected:
 	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::TextBox^ textUsername;
+	private: System::Windows::Forms::Label^ lblUsername;
+	private: System::Windows::Forms::TextBox^ txtUsername;
 
-	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::TextBox^ textPassword;
+
+	private: System::Windows::Forms::Label^ lblPassword;
+	private: System::Windows::Forms::TextBox^ txtPassword;
+
+
+
 	private: System::Windows::Forms::Button^ btnSignup;
 
 	private: System::Windows::Forms::Button^ btnLogin;
@@ -62,29 +71,29 @@ namespace SUper {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->lblHead = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->textUsername = (gcnew System::Windows::Forms::TextBox());
-			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->textPassword = (gcnew System::Windows::Forms::TextBox());
+			this->lblUsername = (gcnew System::Windows::Forms::Label());
+			this->txtUsername = (gcnew System::Windows::Forms::TextBox());
+			this->lblPassword = (gcnew System::Windows::Forms::Label());
+			this->txtPassword = (gcnew System::Windows::Forms::TextBox());
 			this->btnSignup = (gcnew System::Windows::Forms::Button());
 			this->btnLogin = (gcnew System::Windows::Forms::Button());
 			this->lblerror = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
-			// label1
+			// lblHead
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->lblHead->AutoSize = true;
+			this->lblHead->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label1->Location = System::Drawing::Point(195, 18);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(146, 31);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"ValueMart";
-			this->label1->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			this->label1->Click += gcnew System::EventHandler(this, &LoginForm::label1_Click);
+			this->lblHead->Location = System::Drawing::Point(195, 18);
+			this->lblHead->Name = L"lblHead";
+			this->lblHead->Size = System::Drawing::Size(146, 31);
+			this->lblHead->TabIndex = 0;
+			this->lblHead->Text = L"ValueMart";
+			this->lblHead->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			this->lblHead->Click += gcnew System::EventHandler(this, &LoginForm::label1_Click);
 			// 
 			// label2
 			// 
@@ -94,42 +103,43 @@ namespace SUper {
 			this->label2->Size = System::Drawing::Size(0, 13);
 			this->label2->TabIndex = 1;
 			// 
-			// label3
+			// lblUsername
 			// 
-			this->label3->AutoSize = true;
-			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lblUsername->AutoSize = true;
+			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label3->Location = System::Drawing::Point(154, 116);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(76, 16);
-			this->label3->TabIndex = 2;
-			this->label3->Text = L"Username: ";
+			this->lblUsername->Location = System::Drawing::Point(154, 116);
+			this->lblUsername->Name = L"lblUsername";
+			this->lblUsername->Size = System::Drawing::Size(76, 16);
+			this->lblUsername->TabIndex = 2;
+			this->lblUsername->Text = L"Username: ";
 			// 
-			// textUsername
+			// txtUsername
 			// 
-			this->textUsername->Location = System::Drawing::Point(236, 115);
-			this->textUsername->Name = L"textUsername";
-			this->textUsername->Size = System::Drawing::Size(132, 20);
-			this->textUsername->TabIndex = 3;
-			this->textUsername->TextChanged += gcnew System::EventHandler(this, &LoginForm::textBox1_TextChanged);
+			this->txtUsername->Location = System::Drawing::Point(236, 115);
+			this->txtUsername->Name = L"txtUsername";
+			this->txtUsername->Size = System::Drawing::Size(132, 20);
+			this->txtUsername->TabIndex = 3;
+			this->txtUsername->TextChanged += gcnew System::EventHandler(this, &LoginForm::textBox1_TextChanged);
 			// 
-			// label4
+			// lblPassword
 			// 
-			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->lblPassword->AutoSize = true;
+			this->lblPassword->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label4->Location = System::Drawing::Point(157, 146);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(73, 16);
-			this->label4->TabIndex = 4;
-			this->label4->Text = L"Password: ";
+			this->lblPassword->Location = System::Drawing::Point(157, 146);
+			this->lblPassword->Name = L"lblPassword";
+			this->lblPassword->Size = System::Drawing::Size(73, 16);
+			this->lblPassword->TabIndex = 4;
+			this->lblPassword->Text = L"Password: ";
 			// 
-			// textPassword
+			// txtPassword
 			// 
-			this->textPassword->Location = System::Drawing::Point(236, 145);
-			this->textPassword->Name = L"textPassword";
-			this->textPassword->Size = System::Drawing::Size(132, 20);
-			this->textPassword->TabIndex = 5;
+			this->txtPassword->Location = System::Drawing::Point(236, 145);
+			this->txtPassword->Name = L"txtPassword";
+			this->txtPassword->PasswordChar = '*';
+			this->txtPassword->Size = System::Drawing::Size(132, 20);
+			this->txtPassword->TabIndex = 5;
 			// 
 			// btnSignup
 			// 
@@ -152,17 +162,18 @@ namespace SUper {
 			this->btnLogin->TabIndex = 7;
 			this->btnLogin->Text = L"Login";
 			this->btnLogin->UseVisualStyleBackColor = true;
+			this->btnLogin->Click += gcnew System::EventHandler(this, &LoginForm::btnLogin_Click);
 			// 
 			// lblerror
 			// 
 			this->lblerror->AutoSize = true;
 			this->lblerror->ForeColor = System::Drawing::Color::Red;
-			this->lblerror->Location = System::Drawing::Point(434, 292);
+			this->lblerror->Location = System::Drawing::Point(278, 270);
 			this->lblerror->Name = L"lblerror";
 			this->lblerror->Size = System::Drawing::Size(0, 13);
 			this->lblerror->TabIndex = 8;
 			// 
-			// MyForm
+			// LoginForm
 			// 
 			this->AcceptButton = this->btnLogin;
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -171,14 +182,15 @@ namespace SUper {
 			this->Controls->Add(this->lblerror);
 			this->Controls->Add(this->btnLogin);
 			this->Controls->Add(this->btnSignup);
-			this->Controls->Add(this->textPassword);
-			this->Controls->Add(this->label4);
-			this->Controls->Add(this->textUsername);
-			this->Controls->Add(this->label3);
+			this->Controls->Add(this->txtPassword);
+			this->Controls->Add(this->lblPassword);
+			this->Controls->Add(this->txtUsername);
+			this->Controls->Add(this->lblUsername);
 			this->Controls->Add(this->label2);
-			this->Controls->Add(this->label1);
-			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Controls->Add(this->lblHead);
+			this->Name = L"LoginForm";
+			this->Text = L"ValueMart Login";
+			this->Load += gcnew System::EventHandler(this, &LoginForm::LoginForm_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -187,6 +199,63 @@ namespace SUper {
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void LoginForm_Load(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ e) {
+	lblerror->Text = "";
+
+	String^ username = txtUsername->Text->Trim();
+	String^ password = txtPassword->Text;
+
+	if (String::IsNullOrEmpty(username) || String::IsNullOrEmpty(password)) {
+		lblerror->Text = "Please enter username and password";
+		return;
+	}
+
+	DataTable^ result = SBS::Database::ExecuteQuery(
+		"SELECT UserID, Username, Role, IsActive FROM Users "
+		"WHERE Username = @u AND Password = @p",
+		gcnew SqlParameter("@u", username),
+		gcnew SqlParameter("@p", password));
+
+	if (result == nullptr || result->Rows->Count == 0) {
+		lblerror->Text = "Invalid username or password";
+		txtPassword->Clear();
+		return;
+	}
+
+	DataRow^ row = result->Rows[0];
+
+	bool isActive = Convert::ToBoolean(row["IsActive"]);
+	if (!isActive) {
+		lblerror->Text = "Account is deactivated. Contact admin.";
+		return;
+	}
+
+	int userID = Convert::ToInt32(row["UserID"]);
+	String^ uname = row["Username"]->ToString();
+	String^ role = row["Role"]->ToString();
+
+	SBS::Session::SetCurrentUser(userID, uname, role);
+
+	this->Hide();
+
+	if (SBS::Session::IsAdmin()) {
+		AdminDashboardForm^ adminForm = gcnew AdminDashboardForm();
+		adminForm->ShowDialog();
+	}
+	else {
+		MessageBox::Show("Cashier menu coming soon.\nLogged in as: " + uname,
+			"Cashier Login",
+			MessageBoxButtons::OK,
+			MessageBoxIcon::Information);
+	}
+
+	txtUsername->Clear();
+	txtPassword->Clear();
+	txtUsername->Focus();
+	this->Show();
 }
 };
 }
