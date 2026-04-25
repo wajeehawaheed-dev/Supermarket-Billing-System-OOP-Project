@@ -27,10 +27,21 @@
     <ClInclude Include="..\SUPERMARKET\files\shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LoginForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SUPERMARKET\files\schema.sql">
       <Filter>Header Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LoginForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
