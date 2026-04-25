@@ -43,5 +43,8 @@
     <None Include="schema.sql">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="test.sql">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
