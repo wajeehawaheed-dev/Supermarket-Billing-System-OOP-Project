@@ -34,26 +34,37 @@ CREATE TABLE Products (
 );
 
 -- Bills (Member 3)
+-- Member 3 (Cart & Billing) Tables
+
 CREATE TABLE Bills (
-    BillNo      INT IDENTITY(1000,1) PRIMARY KEY,
-    Date        DATETIME      NOT NULL DEFAULT GETDATE(),
-    UserID      INT           NOT NULL,
-    Subtotal    DECIMAL(10,2) NOT NULL,
-    Discount    DECIMAL(10,2) NOT NULL DEFAULT 0,
-    Tax         DECIMAL(10,2) NOT NULL DEFAULT 0,
-    Total       DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    BillNo      INT PRIMARY KEY IDENTITY,
+    Date        DATETIME DEFAULT GETDATE(),
+    UserID      INT,
+    Subtotal    FLOAT,
+    Discount    FLOAT,
+    Tax         FLOAT,
+    Total       FLOAT
 );
 
 CREATE TABLE BillItems (
-    ItemID      INT IDENTITY(1,1) PRIMARY KEY,
-    BillNo      INT           NOT NULL,
-    ProductID   INT           NOT NULL,
-    Quantity    INT           NOT NULL,
-    Price       DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (BillNo)    REFERENCES Bills(BillNo),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    ItemID      INT PRIMARY KEY IDENTITY,
+    BillNo      INT FOREIGN KEY REFERENCES Bills(BillNo),
+    ProductID   INT,
+    Quantity    INT,
+    Price       FLOAT
 );
+
+CREATE TABLE Settings (
+    SettingName  VARCHAR(50) PRIMARY KEY,
+    SettingValue FLOAT
+);
+
+-- Default settings
+INSERT INTO Settings VALUES ('TAX_RATE', 0.17);
+INSERT INTO Settings VALUES ('DISCOUNT_THRESHOLD_1', 5);
+INSERT INTO Settings VALUES ('DISCOUNT_RATE_1', 0.10);
+INSERT INTO Settings VALUES ('DISCOUNT_THRESHOLD_2', 10);
+INSERT INTO Settings VALUES ('DISCOUNT_RATE_2', 0.20);
 
 -- Payments (Member 4)
 CREATE TABLE Payments (
