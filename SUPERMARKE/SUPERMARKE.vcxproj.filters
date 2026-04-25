@@ -15,33 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LoginForm.h">
+    <ClInclude Include="..\files\constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="constants.h">
+    <ClInclude Include="..\files\database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="database.h">
+    <ClInclude Include="..\files\session.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="session.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shared.h">
+    <ClInclude Include="..\files\shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoginForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="schema.sql">
-      <Filter>Header Files</Filter>
-    </None>
+    <None Include="..\SuperMarket\schema.sql" />
+    <None Include="..\files\schema.sql" />
   </ItemGroup>
 </Project>
