@@ -15,21 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\files\constants.h">
+    <ClInclude Include="..\SUPERMARKET\files\constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\database.h">
+    <ClInclude Include="..\SUPERMARKET\files\database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\session.h">
+    <ClInclude Include="..\SUPERMARKET\files\session.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\files\shared.h">
+    <ClInclude Include="..\SUPERMARKET\files\shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\SuperMarket\schema.sql" />
-    <None Include="..\files\schema.sql" />
+    <None Include="..\SUPERMARKET\files\schema.sql">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
