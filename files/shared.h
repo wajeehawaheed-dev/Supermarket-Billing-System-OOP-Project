@@ -71,3 +71,4 @@ struct SalesReport
     double totalCard;
     double revenue;
 };
+#endif
