@@ -43,7 +43,8 @@ CREATE TABLE Bills (
     Subtotal    DECIMAL(10,2),
     Discount    DECIMAL(10,2),
     Tax         DECIMAL(10,2),
-    Total       DECIMAL(10,2)
+    Total       DECIMAL(10,2),
+    IsCancelled BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE BillItems (
@@ -56,8 +57,8 @@ CREATE TABLE BillItems (
 
 CREATE TABLE Settings (
     SettingName  NVARCHAR(50) PRIMARY KEY,
-    SettingValue DECIMAL(10,2) ,
-    Description NVARCHAR
+    SettingValue NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(MAX)
 );
 
 -- Default settings
@@ -68,6 +69,7 @@ INSERT INTO Settings (SettingName, SettingValue, Description) VALUES
 ('DISCOUNT_THRESHOLD_2', '10',        'Item count for second-tier discount'),
 ('DISCOUNT_RATE_2',      '0.20',      'Second-tier discount percentage'),
 ('LOW_STOCK_THRESHOLD',  '5',         'Stock level that triggers low-stock alert'),
+('STORE_NAME', 'ValueMart', 'Name shown on receipts');
 -- Payments (Member 4)
 CREATE TABLE Payments (
     PaymentID   INT IDENTITY(1,1) PRIMARY KEY,
