@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "constants.h"
 using namespace std;
 struct CartItem {
 	int productID;
@@ -33,5 +34,24 @@ public:
 			sum += item.total;
 		}
 		return sum;
+	}
+	double calculateDiscount() {
+		int itemCount = items.size();
+		double subtotal = getSubTotal();
+		if (itemCount >= DISCOUNT_THRESHOLD_2)
+			return subtotal * DISCOUNT_RATE_2;
+		else if (itemCount >= DISCOUNT_THRESHOLD_1)
+			return subtotal * DISCOUNT_RATE_1;
+		return 0;
+	}
+
+	double calculateTax() {
+		double subtotal = getSubTotal();
+		double discount = calculateDiscount();
+		return (subtotal - discount) * TAX_RATE;
+	}
+
+	double getGrandTotal() {
+		return getSubTotal() - calculateDiscount() + calculateTax();
 	}
 };

@@ -122,6 +122,7 @@
     <ClCompile Include="CartForm.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SettingsForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Billing.h" />
@@ -133,6 +134,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="SettingsForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BillingForm.resx">
@@ -140,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CartForm.resx">
       <DependentUpon>CartForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

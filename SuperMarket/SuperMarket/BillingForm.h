@@ -18,7 +18,7 @@ namespace SuperMarket {
             lblStoreName->Text = "SuperMarket Billing Summary";
             lblSubtotal->Text = "Subtotal:    Rs " + billing->getSubtotal().ToString("F2");
             lblDiscount->Text = "Discount:    Rs " + billing->getDiscount().ToString("F2");
-            lblTax->Text = "Tax (17%):   Rs " + billing->getTax().ToString("F2");
+            lblTax->Text = "Tax (" + (TAX_RATE * 100).ToString("F0") + "%):   Rs " + billing->getTax().ToString("F2");
             lblGrandTotal->Text = "Grand Total: Rs " + billing->getGrandTotal().ToString("F2");
 
             delete billing;

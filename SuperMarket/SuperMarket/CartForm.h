@@ -2,6 +2,7 @@
 #include "Cart.h"
 #include "constants.h"
 #include "BillingForm.h"
+#include "SettingsForm.h"
 namespace SuperMarket {
 
 	using namespace System;
@@ -39,19 +40,20 @@ namespace SuperMarket {
 	private: Cart* cart;
 	protected:
 
-	private: System::Windows::Forms::Button^ button1;
-	private: System::Windows::Forms::Button^ button2;
-	private: System::Windows::Forms::Button^ button3;
-	private: System::Windows::Forms::Button^ btnBilling;
-	private: System::Windows::Forms::Label^ lblSubtotal;
-	private: System::Windows::Forms::Label^ lblDiscount;
-	private: System::Windows::Forms::Label^ lblTax;
-	private: System::Windows::Forms::Label^ lblGrandTotal;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colID;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colName;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colPrice;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colQty;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colTotal;
+	private: System::Windows::Forms::Button^ button1; // Add Item button
+	private: System::Windows::Forms::Button^ button2; // Remove Item button
+	private: System::Windows::Forms::Button^ button3; // Clear Cart button
+	private: System::Windows::Forms::Button^ btnBilling; // Proceed to Billing button
+	private: System::Windows::Forms::Button^ btnSettings; // Settings button
+	private: System::Windows::Forms::Label^ lblSubtotal; // Subtotal label
+	private: System::Windows::Forms::Label^ lblDiscount; // Discount label
+	private: System::Windows::Forms::Label^ lblTax; // Tax label
+	private: System::Windows::Forms::Label^ lblGrandTotal; // Grand Total label
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colID; // Product ID column
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colName; // Name column
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colPrice; // Price column
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colQty; // Quantity column
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ colTotal; // Total column
 	protected:
 
 	protected:
@@ -72,19 +74,21 @@ namespace SuperMarket {
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
+		/// Initializes all the controls on the form, sets their properties, and adds them to the form's control collection.
 		void InitializeComponent(void)
 		{
-			this->cartGrid = (gcnew System::Windows::Forms::DataGridView());
-			this->colID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->colName = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->colPrice = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->colQty = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->colTotal = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->button3 = (gcnew System::Windows::Forms::Button());
-			this->btnBilling = (gcnew System::Windows::Forms::Button());
-			this->lblSubtotal = (gcnew System::Windows::Forms::Label());
+			this->cartGrid = (gcnew System::Windows::Forms::DataGridView()); 
+			this->colID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn()); 
+			this->colName = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn()); 
+			this->colPrice = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn()); 
+			this->colQty = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn()); 
+			this->colTotal = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn()); 
+			this->button1 = (gcnew System::Windows::Forms::Button()); 
+			this->button2 = (gcnew System::Windows::Forms::Button()); 
+			this->button3 = (gcnew System::Windows::Forms::Button()); 
+			this->btnBilling = (gcnew System::Windows::Forms::Button()); 
+			this->btnSettings = (gcnew System::Windows::Forms::Button()); 
+			this->lblSubtotal = (gcnew System::Windows::Forms::Label()); 
 			this->lblDiscount = (gcnew System::Windows::Forms::Label());
 			this->lblTax = (gcnew System::Windows::Forms::Label());
 			this->lblGrandTotal = (gcnew System::Windows::Forms::Label());
@@ -171,22 +175,41 @@ namespace SuperMarket {
 			this->button3->Text = L"Clear Cart";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &CartForm::button3_Click);
+			//
+			// btnBilling
+			//
 			this->btnBilling->Location = System::Drawing::Point(510, 570);
 			this->btnBilling->Size = System::Drawing::Size(180, 31);
 			this->btnBilling->Text = L"Proceed to Billing";
 			this->btnBilling->Click += gcnew System::EventHandler(this, &CartForm::btnBilling_Click);
+			//
+			// btnSettings
+			// 
+			this->btnSettings->Location = System::Drawing::Point(710, 570);
+			this->btnSettings->Size = System::Drawing::Size(130, 31);
+			this->btnSettings->Text = L"Settings";
+			this->btnSettings->Click += gcnew System::EventHandler(this, &CartForm::btnSettings_Click);
+			// 
+			// lblSubtotal
+			//
 			this->lblSubtotal->Location = System::Drawing::Point(12, 615);
 			this->lblSubtotal->Size = System::Drawing::Size(300, 30);
 			this->lblSubtotal->Text = L"Subtotal: Rs 0";
-
+			//
+			// lblDiscount
+			//
 			this->lblDiscount->Location = System::Drawing::Point(12, 645);
 			this->lblDiscount->Size = System::Drawing::Size(300, 30);
 			this->lblDiscount->Text = L"Discount: Rs 0";
-
+			//
+			// lblTax
+			//
 			this->lblTax->Location = System::Drawing::Point(12, 675);
 			this->lblTax->Size = System::Drawing::Size(300, 30);
 			this->lblTax->Text = L"Tax (17%): Rs 0";
-
+			//
+			// lblGrandTotal
+			//
 			this->lblGrandTotal->Location = System::Drawing::Point(12, 705);
 			this->lblGrandTotal->Size = System::Drawing::Size(300, 30);
 			this->lblGrandTotal->Font = (gcnew System::Drawing::Font(L"Arial", 11, System::Drawing::FontStyle::Bold));
@@ -206,6 +229,7 @@ namespace SuperMarket {
 			this->Controls->Add(this->lblGrandTotal);
 			this->Controls->Add(this->cartGrid);
 			this->Controls->Add(this->btnBilling);
+			this->Controls->Add(this->btnSettings);
 			this->Name = L"CartForm";
 			this->Text = L"CartForm";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->cartGrid))->EndInit();
@@ -235,7 +259,7 @@ namespace SuperMarket {
 		double grandTotal = subtotal - discount + tax;
 		lblSubtotal->Text = "Subtotal: Rs " + subtotal.ToString("F2");
 		lblDiscount->Text = "Discount: Rs " + discount.ToString("F2");
-		lblTax->Text = "Tax (17%): Rs " + tax.ToString("F2");
+		lblTax->Text = "Tax (" + (TAX_RATE * 100).ToString("F0") + "%): Rs " + tax.ToString("F2");
 		lblGrandTotal->Text = "Grand Total: Rs " + grandTotal.ToString("F2");
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -278,6 +302,7 @@ namespace SuperMarket {
 		inputForm->Controls->Add(txtQty);
 		inputForm->Controls->Add(btnOK);
 		inputForm->AcceptButton = btnOK;
+		// Show the input form and process the result
 		if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			// Check nothing is empty
 			if (txtID->Text == "" || txtName->Text == "" ||
@@ -310,6 +335,7 @@ namespace SuperMarket {
 			UpdateTotals();
 		}
 	}
+	// Click Handlers
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		if(cartGrid->SelectedRows->Count > 0) {
 			int index = cartGrid->SelectedRows[0]->Index;
@@ -337,6 +363,11 @@ private: System::Void btnBilling_Click(System::Object^ sender, System::EventArgs
 	BillingForm^ billingForm = gcnew BillingForm(cart);
 	billingForm->ShowDialog();
 }
+	   private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
+		   SettingsForm^ settings = gcnew SettingsForm();
+		   settings->ShowDialog();
+		   UpdateTotals(); // Recalculate totals in case settings changed
+	   }
 };
 }
 
