@@ -72,15 +72,13 @@ INSERT INTO Settings (SettingName, SettingValue, Description) VALUES
 ('STORE_NAME', 'ValueMart', 'Name shown on receipts');
 -- Payments (Member 4)
 CREATE TABLE Payments (
-    PaymentID   INT IDENTITY(1,1) PRIMARY KEY,
-    BillNo      INT           NOT NULL,
-    Method      NVARCHAR(10)   NOT NULL,
-    AmountPaid  DECIMAL(10,2) NOT NULL,
-    ChangeAmt   DECIMAL(10,2) NOT NULL DEFAULT 0,
-    Status      NVARCHAR(20)   NOT NULL,
-    Date        DATETIME      NOT NULL DEFAULT GETDATE(),
-    CardLast4   VARCHAR(4)    NULL,
-    FOREIGN KEY (BillNo) REFERENCES Bills(BillNo)
+    PaymentID    INT PRIMARY KEY IDENTITY,
+    BillNo       INT  NOT NULL FOREIGN KEY REFERENCES Bills(BillNo),
+    Method       NVARCHAR(10),
+    AmountPaid   DECIMAL(10,2),
+    ChangeAmount DECIMAL(10,2),
+    Status       NVARCHAR(20) DEFAULT N'Pending',
+    PayDate      DATETIME      NOT NULL DEFAULT GETDATE()
 );
 
 -- SalesReport (Member 5 - YOU)
