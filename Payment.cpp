@@ -1,17 +1,9 @@
 #include<iostream>
-#include "database.h"
 #include<ctime>
+#include "Payment.h"
 using namespace std;
-class Payment {
-protected:
-	int paymentID;
-	int billNo;
-	double paid_amount;
-	double total_bill;
-	string status;
-	string  date;
-public:
-	Payment() {
+
+	Payment::Payment() {
 		paymentID = 0;
 		billNo = 0;
 		paid_amount = 0.0;
@@ -19,7 +11,7 @@ public:
 		status = "Pending";
 		date = "";
 	}
-	Payment(int billNo, double total_bill) {
+	Payment::Payment(int billNo, double total_bill) {
 		paymentID = 0;
 		paid_amount = 0.0;
 		status = "Pending";
@@ -27,20 +19,15 @@ public:
 		this->billNo = billNo;
 		this->total_bill = total_bill;
 	}
-	//----------------VIRTUAL------------------------
-	//We made pure virtual objects Because every child will write its own logic 
-	virtual void displaydetails() = 0;
-	virtual bool processpayment() = 0;
-
 
 	//-------------Getters------------------
-	double getAmountPaid() {
+	double Payment::getAmountPaid() {
 		return paid_amount;
 	}
-	string getstatus() {
+	string Payment:: getstatus() {
 		return status;
 	}
-	bool checkstatus() {
+	bool Payment:: checkstatus() {
 		if (status == "Pending")
 			return true;
 		if (status == "Decline")
@@ -48,7 +35,7 @@ public:
 		else // approved ke case main
 			return false;
 	}
-	void cancelPayment() {
+	void Payment:: cancelPayment() {
 		if (checkstatus())
 		{
 			status = "cancelled";
@@ -57,7 +44,6 @@ public:
 		else
 			cout << " Payment can not be cancelled (May be declined or approved)" << endl;
 	}
-	virtual ~Payment() {
-
+	Payment:: ~Payment() {
+		
 	}
-};

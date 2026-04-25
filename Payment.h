@@ -34,5 +34,4 @@ public:
     // Virtual Destructor
     virtual ~Payment();
 };
-
-#endif#pragma once
+#endif
