@@ -9,6 +9,7 @@ GO
 IF OBJECT_ID('BillItems', 'U')   IS NOT NULL DROP TABLE BillItems;
 IF OBJECT_ID('Payments', 'U')    IS NOT NULL DROP TABLE Payments;
 IF OBJECT_ID('Bills', 'U')       IS NOT NULL DROP TABLE Bills;
+IF OBJECT_ID('Settings', 'U')    IS NOT NULL DROP TABLE Settings;
 IF OBJECT_ID('SalesReport', 'U') IS NOT NULL DROP TABLE SalesReport;
 IF OBJECT_ID('Products', 'U')    IS NOT NULL DROP TABLE Products;
 IF OBJECT_ID('Users', 'U')       IS NOT NULL DROP TABLE Users;
@@ -34,38 +35,39 @@ CREATE TABLE Products (
 );
 
 -- Bills (Member 3)
--- Member 3 (Cart & Billing) Tables
 
 CREATE TABLE Bills (
     BillNo      INT PRIMARY KEY IDENTITY,
     Date        DATETIME DEFAULT GETDATE(),
-    UserID      INT,
-    Subtotal    FLOAT,
-    Discount    FLOAT,
-    Tax         FLOAT,
-    Total       FLOAT
+    UserID      INT FOREIGN KEY REFERENCES Users(UserID),
+    Subtotal    DECIMAL(10,2),
+    Discount    DECIMAL(10,2),
+    Tax         DECIMAL(10,2),
+    Total       DECIMAL(10,2)
 );
 
 CREATE TABLE BillItems (
     ItemID      INT PRIMARY KEY IDENTITY,
     BillNo      INT FOREIGN KEY REFERENCES Bills(BillNo),
-    ProductID   INT,
+    ProductID   INT FOREIGN KEY REFERENCES Products(ProductID),
     Quantity    INT,
-    Price       FLOAT
+    Price       DECIMAL(10,2)  
 );
 
 CREATE TABLE Settings (
     SettingName  VARCHAR(50) PRIMARY KEY,
-    SettingValue FLOAT
+    SettingValue DECIMAL(10,2)  
 );
 
 -- Default settings
-INSERT INTO Settings VALUES ('TAX_RATE', 0.17);
-INSERT INTO Settings VALUES ('DISCOUNT_THRESHOLD_1', 5);
-INSERT INTO Settings VALUES ('DISCOUNT_RATE_1', 0.10);
-INSERT INTO Settings VALUES ('DISCOUNT_THRESHOLD_2', 10);
-INSERT INTO Settings VALUES ('DISCOUNT_RATE_2', 0.20);
-
+INSERT INTO Settings (SettingKey, SettingValue, Description) VALUES
+('TAX_RATE',             '0.17',      'GST applied on subtotal after discount'),
+('DISCOUNT_THRESHOLD_1', '5',         'Item count for first-tier discount'),
+('DISCOUNT_RATE_1',      '0.10',      'First-tier discount percentage'),
+('DISCOUNT_THRESHOLD_2', '10',        'Item count for second-tier discount'),
+('DISCOUNT_RATE_2',      '0.20',      'Second-tier discount percentage'),
+('LOW_STOCK_THRESHOLD',  '5',         'Stock level that triggers low-stock alert'),
+('STORE_NAME',           'ValueMart', 'Name shown on receipts');
 -- Payments (Member 4)
 CREATE TABLE Payments (
     PaymentID   INT IDENTITY(1,1) PRIMARY KEY,
