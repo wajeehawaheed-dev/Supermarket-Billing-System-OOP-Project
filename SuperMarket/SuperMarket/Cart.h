@@ -2,15 +2,8 @@
 #include <vector>
 #include <string>
 #include "constants.h"
+#include "shared.h"
 using namespace std;
-
-struct CartItem {
-    int productID;
-    string name;
-    double price;
-    int quantity;
-    double itemTotal;
-};
 
 class Cart {
     vector<CartItem> items;

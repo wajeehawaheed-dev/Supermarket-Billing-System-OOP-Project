@@ -1,6 +1,8 @@
 #pragma once
 #include "Billing.h"
-
+#include "database.h"
+#include <vector>
+using namespace std;
 namespace SuperMarket {
 
     using namespace System;
@@ -14,6 +16,11 @@ namespace SuperMarket {
         {
             InitializeComponent();
             Billing* billing = new Billing(cart);
+			this->savedCart = cart;
+			this->lblSubtotal->Text = "Subtotal:    Rs " + billing->getSubtotal().ToString("F2");
+            this->totalDiscount = billing->getDiscount();
+            this->totalTax = billing->getTax();
+            this->totalGrand = billing->getGrandTotal();
 
             lblStoreName->Text = "SuperMarket Billing Summary";
             lblSubtotal->Text = "Subtotal:    Rs " + billing->getSubtotal().ToString("F2");
@@ -29,6 +36,11 @@ namespace SuperMarket {
 
     private:
         System::ComponentModel::Container^ components;
+		Cart* savedCart;
+        double totalSubtotal;
+        double totalDiscount;
+        double totalTax;
+        double totalGrand;
         System::Windows::Forms::Label^ lblStoreName;
         System::Windows::Forms::Label^ lblSubtotal;
         System::Windows::Forms::Label^ lblDiscount;
@@ -108,8 +120,43 @@ namespace SuperMarket {
             this->Close();
         }
         System::Void btnProceed_Click(System::Object^ sender, System::EventArgs^ e) {
-            MessageBox::Show("Proceeding to Payment...", "Payment");
-            // Member 4's PaymentForm will be opened here
+            // Insert into Bills table
+            String^ billSQL = String::Format(
+                "INSERT INTO Bills (Date, UserID, Subtotal, Discount, Tax, Total) "
+                "VALUES (GETDATE(), 1, {0}, {1}, {2}, {3}); "
+                "SELECT SCOPE_IDENTITY();",
+				totalSubtotal.ToString("F2"),
+                totalDiscount.ToString("F2"),
+                totalTax.ToString("F2"),
+                totalGrand.ToString("F2"));
+
+            Object^ result = SBS::Database::ExecuteScalar(billSQL);
+
+            if (result == nullptr || result == System::DBNull::Value) {
+                MessageBox::Show("Failed to save bill!", "Error");
+                return;
+            }
+
+            int billNo = Convert::ToInt32(result);
+
+            // Insert each item into BillItems
+            vector<CartItem> items = savedCart->getItems();
+            for (int i = 0; i < items.size(); i++) {
+                String^ itemSQL = String::Format(
+                    "INSERT INTO BillItems (BillNo, ProductID, Quantity, Price) "
+                    "VALUES ({0}, {1}, {2}, {3})",
+                    billNo, items[i].productID,
+                    items[i].quantity, items[i].price);
+                SBS::Database::ExecuteNonQuery(itemSQL);
+                // Decrease stock
+                String^ stockSQL = String::Format(
+                    "UPDATE Products SET Stock = Stock - {0} WHERE ProductID = {1}",
+                    items[i].quantity, items[i].productID);
+                SBS::Database::ExecuteNonQuery(stockSQL);
+            }
+
+            MessageBox::Show("Bill saved successfully! Bill No: " + billNo, "Success");
+            // Member 4's PaymentForm will open here
         }
     };
 }

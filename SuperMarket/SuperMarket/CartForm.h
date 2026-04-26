@@ -281,42 +281,76 @@ namespace SuperMarket {
 	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		Form^ inputForm = gcnew Form();
-		inputForm->Text = "Add Item";
-		inputForm->Size = System::Drawing::Size(300, 250);
-		inputForm->StartPosition = FormStartPosition::CenterParent;
+		// Ask for product name
+		Form^ searchForm = gcnew Form();
+		searchForm->Text = "Add Item";
+		searchForm->Size = System::Drawing::Size(350, 280);
+		searchForm->StartPosition = FormStartPosition::CenterParent;
+		searchForm->BackColor = System::Drawing::Color::WhiteSmoke;
 
-		Label^ lblID = gcnew Label();   lblID->Text = "Product ID:";    lblID->Location = System::Drawing::Point(20, 20);
-		TextBox^ txtID = gcnew TextBox(); txtID->Location = System::Drawing::Point(130, 20);
-		Label^ lblName = gcnew Label();   lblName->Text = "Product Name:";  lblName->Location = System::Drawing::Point(20, 60);
-		TextBox^ txtName = gcnew TextBox(); txtName->Location = System::Drawing::Point(130, 60);
-		Label^ lblPrice = gcnew Label();   lblPrice->Text = "Price:";         lblPrice->Location = System::Drawing::Point(20, 100);
-		TextBox^ txtPrice = gcnew TextBox(); txtPrice->Location = System::Drawing::Point(130, 100);
-		Label^ lblQty = gcnew Label();   lblQty->Text = "Quantity:";      lblQty->Location = System::Drawing::Point(20, 140);
-		TextBox^ txtQty = gcnew TextBox(); txtQty->Location = System::Drawing::Point(130, 140);
-		Button^ btnOK = gcnew Button();  btnOK->Text = "Add";            btnOK->Location = System::Drawing::Point(100, 180);
+		Label^ lblName = gcnew Label();
+		lblName->Text = "Product Name:";
+		lblName->Location = System::Drawing::Point(20, 20);
+		lblName->Size = System::Drawing::Size(110, 25);
+
+		TextBox^ txtName = gcnew TextBox();
+		txtName->Location = System::Drawing::Point(140, 20);
+		txtName->Size = System::Drawing::Size(150, 25);
+
+		Label^ lblQty = gcnew Label();
+		lblQty->Text = "Quantity:";
+		lblQty->Location = System::Drawing::Point(20, 60);
+		lblQty->Size = System::Drawing::Size(110, 25);
+
+		TextBox^ txtQty = gcnew TextBox();
+		txtQty->Location = System::Drawing::Point(140, 60);
+		txtQty->Size = System::Drawing::Size(80, 25);
+
+		Button^ btnOK = gcnew Button();
+		btnOK->Text = "Add to Cart";
+		btnOK->Location = System::Drawing::Point(140, 100);
+		btnOK->Size = System::Drawing::Size(150, 30);
+		btnOK->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
+		btnOK->ForeColor = System::Drawing::Color::White;
+		btnOK->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 		btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
 
-		inputForm->Controls->Add(lblID);   inputForm->Controls->Add(txtID);
-		inputForm->Controls->Add(lblName); inputForm->Controls->Add(txtName);
-		inputForm->Controls->Add(lblPrice); inputForm->Controls->Add(txtPrice);
-		inputForm->Controls->Add(lblQty);  inputForm->Controls->Add(txtQty);
-		inputForm->Controls->Add(btnOK);
-		inputForm->AcceptButton = btnOK;
+		searchForm->Controls->Add(lblName);
+		searchForm->Controls->Add(txtName);
+		searchForm->Controls->Add(lblQty);
+		searchForm->Controls->Add(txtQty);
+		searchForm->Controls->Add(btnOK);
+		searchForm->AcceptButton = btnOK;
 
-		if (inputForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			if (txtID->Text == "" || txtName->Text == "" || txtPrice->Text == "" || txtQty->Text == "") {
+		if (searchForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			if (txtName->Text == "" || txtQty->Text == "") {
 				MessageBox::Show("Please fill all fields!", "Error"); return;
 			}
-			int id, qty; double price;
-			if (!Int32::TryParse(txtID->Text, id)) { MessageBox::Show("Product ID must be a number!", "Error"); return; }
-			if (!Double::TryParse(txtPrice->Text, price)) { MessageBox::Show("Price must be a number!", "Error"); return; }
-			if (!Int32::TryParse(txtQty->Text, qty)) { MessageBox::Show("Quantity must be a number!", "Error"); return; }
-			if (price <= 0) { MessageBox::Show("Price must be greater than 0!", "Error"); return; }
-			if (qty <= 0) { MessageBox::Show("Quantity must be greater than 0!", "Error"); return; }
 
-			String^ name = txtName->Text;
+			int qty;
+			if (!Int32::TryParse(txtQty->Text, qty) || qty <= 0) {
+				MessageBox::Show("Quantity must be a valid number greater than 0!", "Error"); return;
+			}
+
+			// Search product in DB
+			String^ sql = "SELECT ProductID, Name, Price, Stock FROM Products WHERE Name LIKE '%" + txtName->Text + "%' AND IsActive = 1";
+			DataTable^ result = SBS::Database::ExecuteQuery(sql);
+
+			if (result->Rows->Count == 0) {
+				MessageBox::Show("Product not found in database!", "Error"); return;
+			}
+
+			// Check stock
+			int stock = Convert::ToInt32(result->Rows[0]["Stock"]);
+			if (qty > stock) {
+				MessageBox::Show("Not enough stock! Available: " + stock, "Error"); return;
+			}
+
+			int id = Convert::ToInt32(result->Rows[0]["ProductID"]);
+			String^ name = result->Rows[0]["Name"]->ToString();
+			double price = Convert::ToDouble(result->Rows[0]["Price"]);
 			double total = price * qty;
+
 			cartGrid->Rows->Add(id, name, price, qty, total);
 			std::string stdName = "";
 			for (int i = 0; i < name->Length; i++) stdName += (char)name[i];
@@ -324,6 +358,7 @@ namespace SuperMarket {
 			UpdateTotals();
 		}
 	}
+
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (cartGrid->SelectedRows->Count > 0) {

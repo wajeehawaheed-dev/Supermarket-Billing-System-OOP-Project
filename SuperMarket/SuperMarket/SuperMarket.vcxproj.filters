@@ -50,5 +50,11 @@
     <ClInclude Include="SettingsForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

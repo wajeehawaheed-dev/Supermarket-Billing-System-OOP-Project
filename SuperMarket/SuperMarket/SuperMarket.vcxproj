@@ -134,9 +134,11 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="SettingsForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="shared.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BillingForm.resx">
