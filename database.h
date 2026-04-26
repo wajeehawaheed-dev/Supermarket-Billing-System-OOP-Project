@@ -79,7 +79,7 @@ namespace SBS {
                 conn->Open();
                 SqlCommand^ cmd = gcnew SqlCommand(sql, conn);
                 if (params != nullptr) {
-                    for each (SqlParameter ^ p in params) {
+                    for each (SqlParameter^ p in params) {
                         cmd->Parameters->Add(p);
                     }
                 }
