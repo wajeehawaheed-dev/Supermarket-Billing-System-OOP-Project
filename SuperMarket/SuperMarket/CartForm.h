@@ -124,28 +124,29 @@ namespace SuperMarket {
 			   this->cartGrid->GridColor = System::Drawing::Color::FromArgb(200, 230, 201);
 			   this->cartGrid->TabIndex = 0;
 			   this->cartGrid->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &CartForm::dataGridView1_CellContentClick);
+			   this->cartGrid->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &CartForm::cartGrid_KeyDown);
 
 			   // Columns
-			   this->colID->HeaderText = L"Product ID"; 
+			   this->colID->HeaderText = L"Product ID";
 			   this->colID->Name = L"colID";
 			   this->colID->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colName->HeaderText = L"Name";     
-			   this->colName->Name = L"colName"; 
+			   this->colName->HeaderText = L"Name";
+			   this->colName->Name = L"colName";
 			   this->colName->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colPrice->HeaderText = L"Price";  
-			   this->colPrice->Name = L"colPrice"; 
+			   this->colPrice->HeaderText = L"Price";
+			   this->colPrice->Name = L"colPrice";
 			   this->colPrice->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
 			   this->colQty->HeaderText = L"Quantity";
-			   this->colQty->Name = L"colQty"; 
+			   this->colQty->Name = L"colQty";
 			   this->colQty->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colTotal->HeaderText = L"Total"; 
-			   this->colTotal->Name = L"colTotal"; 
+			   this->colTotal->HeaderText = L"Total";
+			   this->colTotal->Name = L"colTotal";
 			   this->colTotal->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
 
 			   // button1 - Add Item
 			   this->button1->Location = System::Drawing::Point(12, 640);
-			   this->button1->Size = System::Drawing::Size(143, 35);
-			   this->button1->Text = L"Add Item";
+			   this->button1->Size = System::Drawing::Size(160, 35);
+			   this->button1->Text = L"Add Item (F1)";
 			   this->button1->BackColor = System::Drawing::Color::FromArgb(46, 125, 50);
 			   this->button1->ForeColor = System::Drawing::Color::White;
 			   this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -156,9 +157,9 @@ namespace SuperMarket {
 			   this->button1->Click += gcnew System::EventHandler(this, &CartForm::button1_Click);
 
 			   // button2 - Remove Item
-			   this->button2->Location = System::Drawing::Point(173, 640);
-			   this->button2->Size = System::Drawing::Size(143, 35);
-			   this->button2->Text = L"Remove Item";
+			   this->button2->Location = System::Drawing::Point(182, 640);
+			   this->button2->Size = System::Drawing::Size(190, 35);
+			   this->button2->Text = L"Remove Item (F2)";
 			   this->button2->BackColor = System::Drawing::Color::FromArgb(198, 40, 40);
 			   this->button2->ForeColor = System::Drawing::Color::White;
 			   this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -169,9 +170,9 @@ namespace SuperMarket {
 			   this->button2->Click += gcnew System::EventHandler(this, &CartForm::button2_Click);
 
 			   // button3 - Clear Cart
-			   this->button3->Location = System::Drawing::Point(340, 640);
-			   this->button3->Size = System::Drawing::Size(152, 35);
-			   this->button3->Text = L"Clear Cart";
+			   this->button3->Location = System::Drawing::Point(382, 640);
+			   this->button3->Size = System::Drawing::Size(160, 35);
+			   this->button3->Text = L"Clear Cart (F3)";
 			   this->button3->BackColor = System::Drawing::Color::FromArgb(230, 81, 0);
 			   this->button3->ForeColor = System::Drawing::Color::White;
 			   this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -182,9 +183,9 @@ namespace SuperMarket {
 			   this->button3->Click += gcnew System::EventHandler(this, &CartForm::button3_Click);
 
 			   // btnBilling
-			   this->btnBilling->Location = System::Drawing::Point(510, 640);
-			   this->btnBilling->Size = System::Drawing::Size(180, 35);
-			   this->btnBilling->Text = L"Proceed to Billing";
+			   this->btnBilling->Location = System::Drawing::Point(552, 640);
+			   this->btnBilling->Size = System::Drawing::Size(210, 35);
+			   this->btnBilling->Text = L"Proceed to Billing (F4)";
 			   this->btnBilling->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
 			   this->btnBilling->ForeColor = System::Drawing::Color::White;
 			   this->btnBilling->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -195,9 +196,9 @@ namespace SuperMarket {
 			   this->btnBilling->Click += gcnew System::EventHandler(this, &CartForm::btnBilling_Click);
 
 			   // btnSettings
-			   this->btnSettings->Location = System::Drawing::Point(710, 640);
-			   this->btnSettings->Size = System::Drawing::Size(130, 35);
-			   this->btnSettings->Text = L"Settings";
+			   this->btnSettings->Location = System::Drawing::Point(772, 640);
+			   this->btnSettings->Size = System::Drawing::Size(150, 35);
+			   this->btnSettings->Text = L"Settings (F5)";
 			   this->btnSettings->BackColor = System::Drawing::Color::FromArgb(66, 66, 66);
 			   this->btnSettings->ForeColor = System::Drawing::Color::White;
 			   this->btnSettings->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -250,6 +251,8 @@ namespace SuperMarket {
 			   this->ClientSize = System::Drawing::Size(1760, 830);
 			   this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			   this->BackColor = System::Drawing::Color::WhiteSmoke;
+			   this->KeyPreview = true;
+			   this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &CartForm::CartForm_KeyDown);
 			   this->Name = L"CartForm";
 			   this->Text = L"ValueMart - Billing System";
 
@@ -403,6 +406,37 @@ namespace SuperMarket {
 		SettingsForm^ settings = gcnew SettingsForm();
 		settings->ShowDialog();
 		UpdateTotals();
+	}
+	private: System::Void cartGrid_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		if (e->KeyCode == Keys::Delete) {
+			if (cartGrid->SelectedRows->Count > 0) {
+				int index = cartGrid->SelectedRows[0]->Index;
+				if (!cartGrid->Rows[index]->IsNewRow) {
+					cartGrid->Rows->RemoveAt(index);
+					cart->clearCart();
+					// Re-add remaining items
+					for (int i = 0; i < cartGrid->Rows->Count; i++) {
+						if (!cartGrid->Rows[i]->IsNewRow) {
+							int id = Convert::ToInt32(cartGrid->Rows[i]->Cells["colID"]->Value);
+							double price = Convert::ToDouble(cartGrid->Rows[i]->Cells["colPrice"]->Value);
+							int qty = Convert::ToInt32(cartGrid->Rows[i]->Cells["colQty"]->Value);
+							String^ name = cartGrid->Rows[i]->Cells["colName"]->Value->ToString();
+							std::string stdName = "";
+							for (int j = 0; j < name->Length; j++) stdName += (char)name[j];
+							cart->addItem(id, stdName, price, qty);
+						}
+					}
+					UpdateTotals();
+				}
+			}
+		}
+	}
+	private: System::Void CartForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
+		if (e->KeyCode == Keys::F1) button1->PerformClick();    // F1 = Add Item
+		if (e->KeyCode == Keys::F2) button2->PerformClick();    // F2 = Remove Item
+		if (e->KeyCode == Keys::F3) button3->PerformClick();    // F3 = Clear Cart
+		if (e->KeyCode == Keys::F4) btnBilling->PerformClick(); // F4 = Proceed to Billing
+		if (e->KeyCode == Keys::F5) btnSettings->PerformClick();// F5 = Settings
 	}
 	};
 }
