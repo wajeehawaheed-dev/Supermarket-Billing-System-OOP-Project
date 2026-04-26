@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "BillingForm.h"
 #include "SettingsForm.h"
+#include "database.h"
 namespace SuperMarket {
 
 	using namespace System;
@@ -19,6 +20,19 @@ namespace SuperMarket {
 		{
 			InitializeComponent();
 			cart = new Cart();
+			// Load settings from DB
+			DataTable^ settings = SBS::Database::ExecuteQuery(
+				"SELECT SettingName, SettingValue FROM Settings");
+			for (int i = 0; i < settings->Rows->Count; i++) {
+				String^ name = settings->Rows[i]["SettingName"]->ToString();
+				String^ value = settings->Rows[i]["SettingValue"]->ToString();
+				if (name == "TAX_RATE")             TAX_RATE = Double::Parse(value);
+				if (name == "DISCOUNT_THRESHOLD_1") DISCOUNT_THRESHOLD_1 = Int32::Parse(value);
+				if (name == "DISCOUNT_RATE_1")      DISCOUNT_RATE_1 = Double::Parse(value);
+				if (name == "DISCOUNT_THRESHOLD_2") DISCOUNT_THRESHOLD_2 = Int32::Parse(value);
+				if (name == "DISCOUNT_RATE_2")      DISCOUNT_RATE_2 = Double::Parse(value);
+			}
+			UpdateTotals(); // refresh labels with loaded settings
 		}
 
 	protected:

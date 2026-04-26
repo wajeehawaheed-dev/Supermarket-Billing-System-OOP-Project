@@ -1,6 +1,6 @@
 #pragma once
 #include "constants.h"
-
+#include "database.h"
 namespace SuperMarket {
 
     using namespace System;
@@ -162,6 +162,13 @@ namespace SuperMarket {
             DISCOUNT_RATE_1 = d1;
             DISCOUNT_THRESHOLD_2 = t2;
             DISCOUNT_RATE_2 = d2;
+
+            // Save to DB
+            SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + tax.ToString() + "' WHERE SettingName = 'TAX_RATE'");
+            SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + t1.ToString() + "' WHERE SettingName = 'DISCOUNT_THRESHOLD_1'");
+            SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + d1.ToString() + "' WHERE SettingName = 'DISCOUNT_RATE_1'");
+            SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + t2.ToString() + "' WHERE SettingName = 'DISCOUNT_THRESHOLD_2'");
+            SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + d2.ToString() + "' WHERE SettingName = 'DISCOUNT_RATE_2'");
 
             MessageBox::Show("Settings saved successfully!", "Success");
             this->Close();

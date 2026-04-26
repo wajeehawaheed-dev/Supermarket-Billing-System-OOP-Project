@@ -16,12 +16,11 @@ namespace SuperMarket {
         {
             InitializeComponent();
             Billing* billing = new Billing(cart);
-			this->savedCart = cart;
-			this->lblSubtotal->Text = "Subtotal:    Rs " + billing->getSubtotal().ToString("F2");
+            this->savedCart = cart;
+            this->totalSubtotal = billing->getSubtotal();
             this->totalDiscount = billing->getDiscount();
             this->totalTax = billing->getTax();
             this->totalGrand = billing->getGrandTotal();
-
             lblStoreName->Text = "SuperMarket Billing Summary";
             lblSubtotal->Text = "Subtotal:    Rs " + billing->getSubtotal().ToString("F2");
             lblDiscount->Text = "Discount:    Rs " + billing->getDiscount().ToString("F2");
@@ -125,10 +124,7 @@ namespace SuperMarket {
                 "INSERT INTO Bills (Date, UserID, Subtotal, Discount, Tax, Total) "
                 "VALUES (GETDATE(), 1, {0}, {1}, {2}, {3}); "
                 "SELECT SCOPE_IDENTITY();",
-				totalSubtotal.ToString("F2"),
-                totalDiscount.ToString("F2"),
-                totalTax.ToString("F2"),
-                totalGrand.ToString("F2"));
+                totalSubtotal, totalDiscount, totalTax, totalGrand);
 
             Object^ result = SBS::Database::ExecuteScalar(billSQL);
 
