@@ -18,7 +18,7 @@ namespace SBS {
             return ExecuteNonQuery(sql, nullptr);
         }
 
-        static int ExecuteNonQuery(String^ sql, ... array<SqlParameter^>^ params) {
+        static int ExecuteNonQuery(String^ sql, ... cli::array<SqlParameter^>^ params) {
             SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
             try {
                 conn->Open();
@@ -44,7 +44,7 @@ namespace SBS {
             return ExecuteQuery(sql, nullptr);
         }
 
-        static DataTable^ ExecuteQuery(String^ sql, ... array<SqlParameter^>^ params) {
+        static DataTable^ ExecuteQuery(String^ sql, ... cli::array<SqlParameter^>^ params) {
             DataTable^ table = gcnew DataTable();
             SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
             try {
@@ -72,7 +72,7 @@ namespace SBS {
             return ExecuteScalar(sql, nullptr);
         }
 
-        static Object^ ExecuteScalar(String^ sql, ... array<SqlParameter^>^ params) {
+        static Object^ ExecuteScalar(String^ sql, ... cli::array<SqlParameter^>^ params) {
             Object^ result = nullptr;
             SqlConnection^ conn = gcnew SqlConnection(GetConnectionString());
             try {
