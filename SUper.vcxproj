@@ -122,9 +122,18 @@
     <ClInclude Include="AdminDashboardForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="BestSellersForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="LoginForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="PaymentMethodForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="SalesReportForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="session.h" />
@@ -139,15 +148,27 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdminDashboardForm.cpp" />
+    <ClCompile Include="BestSellersForm.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PaymentMethodForm.cpp" />
+    <ClCompile Include="SalesReportForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AdminDashboardForm.resx">
       <DependentUpon>AdminDashboardForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BestSellersForm.resx">
+      <DependentUpon>BestSellersForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentMethodForm.resx">
+      <DependentUpon>PaymentMethodForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesReportForm.resx">
+      <DependentUpon>SalesReportForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

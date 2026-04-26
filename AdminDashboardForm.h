@@ -1,6 +1,9 @@
-#pragma once
+﻿#pragma once
 #include "session.h"
-
+#include "database.h"
+#include "SalesReportForm.h"
+#include "BestSellersForm.h"
+#include "PaymentMethodForm.h"
 namespace SUper {
 
 	using namespace System;
@@ -19,15 +22,9 @@ namespace SUper {
 		AdminDashboardForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~AdminDashboardForm()
 		{
 			if (components)
@@ -36,37 +33,30 @@ namespace SUper {
 			}
 		}
 	private: System::Windows::Forms::Label^ lblHead;
-	protected:
-
 	private: System::Windows::Forms::Label^ lblWelcome;
-	protected:
-
 	private: System::Windows::Forms::Button^ btnReports;
 	private: System::Windows::Forms::Button^ btnLogout;
-
-
-
-
-
 	private: System::Windows::Forms::Button^ btnSettings;
-	private: System::Windows::Forms::Button^ btnUsers;
-	private: System::Windows::Forms::Button^ btnBills;
+	private: System::Windows::Forms::Button^ btnPayments;
+	private: System::Windows::Forms::Button^ btnBestSellers;
 
 
+	private: System::Windows::Forms::Button^ btnRefresh;
 
-
+		   // Dashboard tiles - captions and values
+	private: System::Windows::Forms::Label^ lblTodayCaption;
+	private: System::Windows::Forms::Label^ lblTodayValue;
+	private: System::Windows::Forms::Label^ lblWeekCaption;
+	private: System::Windows::Forms::Label^ lblWeekValue;
+	private: System::Windows::Forms::Label^ lblMonthCaption;
+	private: System::Windows::Forms::Label^ lblMonthValue;
+	private: System::Windows::Forms::Label^ lblAllTimeCaption;
+	private: System::Windows::Forms::Label^ lblAllTimeValue;
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		void InitializeComponent(void)
 		{
 			this->lblHead = (gcnew System::Windows::Forms::Label());
@@ -74,8 +64,17 @@ namespace SUper {
 			this->btnReports = (gcnew System::Windows::Forms::Button());
 			this->btnLogout = (gcnew System::Windows::Forms::Button());
 			this->btnSettings = (gcnew System::Windows::Forms::Button());
-			this->btnUsers = (gcnew System::Windows::Forms::Button());
-			this->btnBills = (gcnew System::Windows::Forms::Button());
+			this->btnPayments = (gcnew System::Windows::Forms::Button());
+			this->btnBestSellers = (gcnew System::Windows::Forms::Button());
+			this->lblTodayCaption = (gcnew System::Windows::Forms::Label());
+			this->lblTodayValue = (gcnew System::Windows::Forms::Label());
+			this->lblWeekCaption = (gcnew System::Windows::Forms::Label());
+			this->lblWeekValue = (gcnew System::Windows::Forms::Label());
+			this->lblMonthCaption = (gcnew System::Windows::Forms::Label());
+			this->lblMonthValue = (gcnew System::Windows::Forms::Label());
+			this->lblAllTimeCaption = (gcnew System::Windows::Forms::Label());
+			this->lblAllTimeValue = (gcnew System::Windows::Forms::Label());
+			this->btnRefresh = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// lblHead
@@ -83,7 +82,7 @@ namespace SUper {
 			this->lblHead->AutoSize = true;
 			this->lblHead->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblHead->Location = System::Drawing::Point(123, 9);
+			this->lblHead->Location = System::Drawing::Point(190, 9);
 			this->lblHead->Name = L"lblHead";
 			this->lblHead->Size = System::Drawing::Size(344, 29);
 			this->lblHead->TabIndex = 1;
@@ -94,7 +93,7 @@ namespace SUper {
 			this->lblWelcome->AutoSize = true;
 			this->lblWelcome->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblWelcome->Location = System::Drawing::Point(247, 57);
+			this->lblWelcome->Location = System::Drawing::Point(310, 50);
 			this->lblWelcome->Name = L"lblWelcome";
 			this->lblWelcome->Size = System::Drawing::Size(117, 18);
 			this->lblWelcome->TabIndex = 2;
@@ -102,9 +101,8 @@ namespace SUper {
 			// 
 			// btnReports
 			// 
-			this->btnReports->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnReports->Location = System::Drawing::Point(174, 99);
+			this->btnReports->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->btnReports->Location = System::Drawing::Point(240, 180);
 			this->btnReports->Name = L"btnReports";
 			this->btnReports->Size = System::Drawing::Size(250, 40);
 			this->btnReports->TabIndex = 3;
@@ -115,7 +113,7 @@ namespace SUper {
 			// btnLogout
 			// 
 			this->btnLogout->ForeColor = System::Drawing::Color::Red;
-			this->btnLogout->Location = System::Drawing::Point(452, 318);
+			this->btnLogout->Location = System::Drawing::Point(610, 410);
 			this->btnLogout->Name = L"btnLogout";
 			this->btnLogout->Size = System::Drawing::Size(120, 35);
 			this->btnLogout->TabIndex = 7;
@@ -125,9 +123,8 @@ namespace SUper {
 			// 
 			// btnSettings
 			// 
-			this->btnSettings->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnSettings->Location = System::Drawing::Point(174, 145);
+			this->btnSettings->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->btnSettings->Location = System::Drawing::Point(240, 230);
 			this->btnSettings->Name = L"btnSettings";
 			this->btnSettings->Size = System::Drawing::Size(250, 40);
 			this->btnSettings->TabIndex = 8;
@@ -135,40 +132,138 @@ namespace SUper {
 			this->btnSettings->UseVisualStyleBackColor = true;
 			this->btnSettings->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnSettings_Click);
 			// 
-			// btnUsers
+			// btnPayments
 			// 
-			this->btnUsers->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnUsers->Location = System::Drawing::Point(174, 191);
-			this->btnUsers->Name = L"btnUsers";
-			this->btnUsers->Size = System::Drawing::Size(250, 40);
-			this->btnUsers->TabIndex = 9;
-			this->btnUsers->Text = L"Manage Users";
-			this->btnUsers->UseVisualStyleBackColor = true;
-			this->btnUsers->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnUsers_Click);
+			this->btnPayments->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->btnPayments->Location = System::Drawing::Point(240, 280);
+			this->btnPayments->Name = L"btnPayments";
+			this->btnPayments->Size = System::Drawing::Size(250, 40);
+			this->btnPayments->TabIndex = 9;
+			this->btnPayments->Text = L"Payment Methods";
+			this->btnPayments->UseVisualStyleBackColor = true;
+			this->btnPayments->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnPayments_Click);
 			// 
-			// btnBills
+			// btnBestSellers
 			// 
-			this->btnBills->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnBills->Location = System::Drawing::Point(174, 237);
-			this->btnBills->Name = L"btnBills";
-			this->btnBills->Size = System::Drawing::Size(250, 40);
-			this->btnBills->TabIndex = 10;
-			this->btnBills->Text = L"View All Bills";
-			this->btnBills->UseVisualStyleBackColor = true;
-			this->btnBills->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnBills_Click);
+			this->btnBestSellers->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->btnBestSellers->Location = System::Drawing::Point(240, 330);
+			this->btnBestSellers->Name = L"btnBestSellers";
+			this->btnBestSellers->Size = System::Drawing::Size(250, 40);
+			this->btnBestSellers->TabIndex = 10;
+			this->btnBestSellers->Text = L"Best Sellers";
+			this->btnBestSellers->UseVisualStyleBackColor = true;
+			this->btnBestSellers->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnBills_Click);
+			// 
+			// lblTodayCaption
+			// 
+			this->lblTodayCaption->AutoSize = true;
+			this->lblTodayCaption->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9));
+			this->lblTodayCaption->Location = System::Drawing::Point(40, 95);
+			this->lblTodayCaption->Name = L"lblTodayCaption";
+			this->lblTodayCaption->Size = System::Drawing::Size(40, 15);
+			this->lblTodayCaption->TabIndex = 18;
+			this->lblTodayCaption->Text = L"Today";
+			// 
+			// lblTodayValue
+			// 
+			this->lblTodayValue->AutoSize = true;
+			this->lblTodayValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold));
+			this->lblTodayValue->Location = System::Drawing::Point(40, 115);
+			this->lblTodayValue->Name = L"lblTodayValue";
+			this->lblTodayValue->Size = System::Drawing::Size(79, 24);
+			this->lblTodayValue->TabIndex = 17;
+			this->lblTodayValue->Text = L"Rs 0.00";
+			// 
+			// lblWeekCaption
+			// 
+			this->lblWeekCaption->AutoSize = true;
+			this->lblWeekCaption->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9));
+			this->lblWeekCaption->Location = System::Drawing::Point(220, 95);
+			this->lblWeekCaption->Name = L"lblWeekCaption";
+			this->lblWeekCaption->Size = System::Drawing::Size(70, 15);
+			this->lblWeekCaption->TabIndex = 16;
+			this->lblWeekCaption->Text = L"Last 7 Days";
+			// 
+			// lblWeekValue
+			// 
+			this->lblWeekValue->AutoSize = true;
+			this->lblWeekValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold));
+			this->lblWeekValue->Location = System::Drawing::Point(220, 115);
+			this->lblWeekValue->Name = L"lblWeekValue";
+			this->lblWeekValue->Size = System::Drawing::Size(79, 24);
+			this->lblWeekValue->TabIndex = 15;
+			this->lblWeekValue->Text = L"Rs 0.00";
+			// 
+			// lblMonthCaption
+			// 
+			this->lblMonthCaption->AutoSize = true;
+			this->lblMonthCaption->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9));
+			this->lblMonthCaption->Location = System::Drawing::Point(400, 95);
+			this->lblMonthCaption->Name = L"lblMonthCaption";
+			this->lblMonthCaption->Size = System::Drawing::Size(77, 15);
+			this->lblMonthCaption->TabIndex = 14;
+			this->lblMonthCaption->Text = L"Last 30 Days";
+			// 
+			// lblMonthValue
+			// 
+			this->lblMonthValue->AutoSize = true;
+			this->lblMonthValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold));
+			this->lblMonthValue->Location = System::Drawing::Point(400, 115);
+			this->lblMonthValue->Name = L"lblMonthValue";
+			this->lblMonthValue->Size = System::Drawing::Size(79, 24);
+			this->lblMonthValue->TabIndex = 13;
+			this->lblMonthValue->Text = L"Rs 0.00";
+			// 
+			// lblAllTimeCaption
+			// 
+			this->lblAllTimeCaption->AutoSize = true;
+			this->lblAllTimeCaption->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9));
+			this->lblAllTimeCaption->Location = System::Drawing::Point(580, 95);
+			this->lblAllTimeCaption->Name = L"lblAllTimeCaption";
+			this->lblAllTimeCaption->Size = System::Drawing::Size(85, 15);
+			this->lblAllTimeCaption->TabIndex = 12;
+			this->lblAllTimeCaption->Text = L"Bills (All Time)";
+			// 
+			// lblAllTimeValue
+			// 
+			this->lblAllTimeValue->AutoSize = true;
+			this->lblAllTimeValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14, System::Drawing::FontStyle::Bold));
+			this->lblAllTimeValue->Location = System::Drawing::Point(580, 115);
+			this->lblAllTimeValue->Name = L"lblAllTimeValue";
+			this->lblAllTimeValue->Size = System::Drawing::Size(21, 24);
+			this->lblAllTimeValue->TabIndex = 11;
+			this->lblAllTimeValue->Text = L"0";
+			// 
+			// btnRefresh
+			// 
+			this->btnRefresh->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9));
+			this->btnRefresh->Location = System::Drawing::Point(640, 50);
+			this->btnRefresh->Name = L"btnRefresh";
+			this->btnRefresh->Size = System::Drawing::Size(90, 30);
+			this->btnRefresh->TabIndex = 11;
+			this->btnRefresh->Text = L"⟳ Refresh";
+			this->btnRefresh->UseVisualStyleBackColor = true;
+			this->btnRefresh->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnRefresh_Click);
 			// 
 			// AdminDashboardForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(584, 411);
-			this->Controls->Add(this->btnBills);
-			this->Controls->Add(this->btnUsers);
-			this->Controls->Add(this->btnSettings);
+			this->ClientSize = System::Drawing::Size(750, 460);
 			this->Controls->Add(this->btnLogout);
+			this->Controls->Add(this->btnBestSellers);
+			this->Controls->Add(this->btnPayments);
+			this->Controls->Add(this->btnSettings);
 			this->Controls->Add(this->btnReports);
+			this->Controls->Add(this->lblAllTimeValue);
+			this->Controls->Add(this->lblAllTimeCaption);
+			this->Controls->Add(this->lblMonthValue);
+			this->Controls->Add(this->lblMonthCaption);
+			this->Controls->Add(this->lblWeekValue);
+			this->Controls->Add(this->lblWeekCaption);
+			this->Controls->Add(this->lblTodayValue);
+			this->Controls->Add(this->lblTodayCaption);
+			this->Controls->Add(this->btnRefresh);
 			this->Controls->Add(this->lblWelcome);
 			this->Controls->Add(this->lblHead);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
@@ -181,37 +276,77 @@ namespace SUper {
 			this->PerformLayout();
 
 		}
+
 #pragma endregion
+
 	private: System::Void btnReports_Click(System::Object^ sender, System::EventArgs^ e) {
-		MessageBox::Show("Reports form coming soon.",
+		SalesReportForm^ form = gcnew SalesReportForm();
+		form->ShowDialog();
+		LoadDashboardTiles();
+	}
+
+	private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("Settings form coming soon.",
 			"Coming Soon",
 			MessageBoxButtons::OK,
 			MessageBoxIcon::Information);
 	}
-private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show("Settings form coming soon.",
-		"Coming Soon",
-		MessageBoxButtons::OK,
-		MessageBoxIcon::Information);
-}
-private: System::Void btnUsers_Click(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show("User management coming soon.",
-		"Coming Soon",
-		MessageBoxButtons::OK,
-		MessageBoxIcon::Information);
-}
-private: System::Void btnBills_Click(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show("Bills view coming soon.",
-		"Coming Soon",
-		MessageBoxButtons::OK,
-		MessageBoxIcon::Information);
-}
-private: System::Void btnLogout_Click(System::Object^ sender, System::EventArgs^ e) {
-	SBS::Session::Logout();
-	this->Close();
-}
-private: System::Void AdminDashboardForm_Load(System::Object^ sender, System::EventArgs^ e) {
-	lblWelcome->Text = "Welcome, " + SBS::Session::GetUsername();
-}
-};
+
+	private: System::Void btnPayments_Click(System::Object^ sender, System::EventArgs^ e) {
+		PaymentMethodForm^ form = gcnew PaymentMethodForm();
+		form->ShowDialog();
+	}
+
+	private: System::Void btnBills_Click(System::Object^ sender, System::EventArgs^ e) {
+		BestSellersForm^ form = gcnew BestSellersForm();
+		form->ShowDialog();
+	}
+
+	private: System::Void btnLogout_Click(System::Object^ sender, System::EventArgs^ e) {
+		SBS::Session::Logout();
+		this->Close();
+	}
+
+	private: System::Void AdminDashboardForm_Load(System::Object^ sender, System::EventArgs^ e) {
+		lblWelcome->Text = "Welcome, " + SBS::Session::GetUsername();
+		LoadDashboardTiles();
+	}
+
+		   void LoadDashboardTiles() {
+			   System::Data::DataTable^ result = SBS::Database::ExecuteQuery(
+				   "SELECT "
+				   "  SUM(CASE WHEN CAST(Date AS DATE) = CAST(GETDATE() AS DATE) THEN Total ELSE 0 END) AS Today, "
+				   "  SUM(CASE WHEN Date >= DATEADD(day, -7, GETDATE())  THEN Total ELSE 0 END)         AS Last7, "
+				   "  SUM(CASE WHEN Date >= DATEADD(day, -30, GETDATE()) THEN Total ELSE 0 END)         AS Last30, "
+				   "  COUNT(*)                                                                          AS BillCount "
+				   "FROM Bills "
+				   "WHERE IsCancelled = 0");
+
+			   if (result == nullptr || result->Rows->Count == 0) {
+				   lblTodayValue->Text = "Rs 0.00";
+				   lblWeekValue->Text = "Rs 0.00";
+				   lblMonthValue->Text = "Rs 0.00";
+				   lblAllTimeValue->Text = "0";
+				   return;
+			   }
+
+			   System::Data::DataRow^ row = result->Rows[0];
+
+			   lblTodayValue->Text = "Rs " + FormatMoney(row["Today"]);
+			   lblWeekValue->Text = "Rs " + FormatMoney(row["Last7"]);
+			   lblMonthValue->Text = "Rs " + FormatMoney(row["Last30"]);
+			   lblAllTimeValue->Text = row["BillCount"]->ToString();
+		   }
+
+		   System::String^ FormatMoney(System::Object^ value) {
+			   if (value == nullptr || value == System::DBNull::Value) {
+				   return "0.00";
+			   }
+			   double v = System::Convert::ToDouble(value);
+			   return v.ToString("N2");
+		   }
+		   private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs^ e) {
+			   LoadDashboardTiles();
+		   }
+	};
 }
