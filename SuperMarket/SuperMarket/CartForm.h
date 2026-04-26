@@ -4,6 +4,7 @@
 #include "BillingForm.h"
 #include "SettingsForm.h"
 #include "database.h"
+
 namespace SuperMarket {
 
 	using namespace System;
@@ -16,10 +17,16 @@ namespace SuperMarket {
 	public ref class CartForm : public System::Windows::Forms::Form
 	{
 	public:
-		CartForm(void)
+		CartForm(String^ role)
 		{
 			InitializeComponent();
 			cart = new Cart();
+			currentRole = role;
+			// Hide Settings if not Admin
+			if (currentRole->ToLower() != "admin") {
+				btnSettings->Enabled = false;
+			}
+
 			// Load settings from DB
 			DataTable^ settings = SBS::Database::ExecuteQuery(
 				"SELECT SettingName, SettingValue FROM Settings");
@@ -32,7 +39,7 @@ namespace SuperMarket {
 				if (name == "DISCOUNT_THRESHOLD_2") DISCOUNT_THRESHOLD_2 = Int32::Parse(value);
 				if (name == "DISCOUNT_RATE_2")      DISCOUNT_RATE_2 = Double::Parse(value);
 			}
-			UpdateTotals(); // refresh labels with loaded settings
+			UpdateTotals();
 		}
 
 	protected:
@@ -43,6 +50,7 @@ namespace SuperMarket {
 		}
 
 	private: System::Windows::Forms::Panel^ headerPanel;
+	private: String^ currentRole;
 	private: System::Windows::Forms::Label^ lblHeader;
 	private: System::Windows::Forms::DataGridView^ cartGrid;
 	private: Cart* cart;
@@ -127,21 +135,11 @@ namespace SuperMarket {
 			   this->cartGrid->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &CartForm::cartGrid_KeyDown);
 
 			   // Columns
-			   this->colID->HeaderText = L"Product ID";
-			   this->colID->Name = L"colID";
-			   this->colID->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colName->HeaderText = L"Name";
-			   this->colName->Name = L"colName";
-			   this->colName->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colPrice->HeaderText = L"Price";
-			   this->colPrice->Name = L"colPrice";
-			   this->colPrice->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colQty->HeaderText = L"Quantity";
-			   this->colQty->Name = L"colQty";
-			   this->colQty->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
-			   this->colTotal->HeaderText = L"Total";
-			   this->colTotal->Name = L"colTotal";
-			   this->colTotal->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
+			   this->colID->HeaderText = L"Product ID"; this->colID->Name = L"colID";    this->colID->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
+			   this->colName->HeaderText = L"Name";       this->colName->Name = L"colName";  this->colName->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
+			   this->colPrice->HeaderText = L"Price";      this->colPrice->Name = L"colPrice"; this->colPrice->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
+			   this->colQty->HeaderText = L"Quantity";   this->colQty->Name = L"colQty";   this->colQty->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
+			   this->colTotal->HeaderText = L"Total";      this->colTotal->Name = L"colTotal"; this->colTotal->AutoSizeMode = DataGridViewAutoSizeColumnMode::Fill;
 
 			   // button1 - Add Item
 			   this->button1->Location = System::Drawing::Point(12, 640);
@@ -298,10 +296,9 @@ namespace SuperMarket {
 	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		// Ask for product name
 		Form^ searchForm = gcnew Form();
 		searchForm->Text = "Add Item";
-		searchForm->Size = System::Drawing::Size(350, 280);
+		searchForm->Size = System::Drawing::Size(350, 180);
 		searchForm->StartPosition = FormStartPosition::CenterParent;
 		searchForm->BackColor = System::Drawing::Color::WhiteSmoke;
 
@@ -343,31 +340,23 @@ namespace SuperMarket {
 			if (txtName->Text == "" || txtQty->Text == "") {
 				MessageBox::Show("Please fill all fields!", "Error"); return;
 			}
-
 			int qty;
 			if (!Int32::TryParse(txtQty->Text, qty) || qty <= 0) {
 				MessageBox::Show("Quantity must be a valid number greater than 0!", "Error"); return;
 			}
-
-			// Search product in DB
 			String^ sql = "SELECT ProductID, Name, Price, Stock FROM Products WHERE Name LIKE '%" + txtName->Text + "%' AND IsActive = 1";
 			DataTable^ result = SBS::Database::ExecuteQuery(sql);
-
 			if (result->Rows->Count == 0) {
 				MessageBox::Show("Product not found in database!", "Error"); return;
 			}
-
-			// Check stock
 			int stock = Convert::ToInt32(result->Rows[0]["Stock"]);
 			if (qty > stock) {
 				MessageBox::Show("Not enough stock! Available: " + stock, "Error"); return;
 			}
-
 			int id = Convert::ToInt32(result->Rows[0]["ProductID"]);
 			String^ name = result->Rows[0]["Name"]->ToString();
 			double price = Convert::ToDouble(result->Rows[0]["Price"]);
 			double total = price * qty;
-
 			cartGrid->Rows->Add(id, name, price, qty, total);
 			std::string stdName = "";
 			for (int i = 0; i < name->Length; i++) stdName += (char)name[i];
@@ -375,7 +364,6 @@ namespace SuperMarket {
 			UpdateTotals();
 		}
 	}
-
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (cartGrid->SelectedRows->Count > 0) {
@@ -391,6 +379,7 @@ namespace SuperMarket {
 
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 		cartGrid->Rows->Clear();
+		cart->clearCart();
 		UpdateTotals();
 	}
 
@@ -403,10 +392,16 @@ namespace SuperMarket {
 	}
 
 	private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (currentRole->ToLower() != "admin") {
+			MessageBox::Show("Access Denied! Admin only.", "Security");
+			return;
+		}
+
 		SettingsForm^ settings = gcnew SettingsForm();
 		settings->ShowDialog();
 		UpdateTotals();
 	}
+
 	private: System::Void cartGrid_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 		if (e->KeyCode == Keys::Delete) {
 			if (cartGrid->SelectedRows->Count > 0) {
@@ -414,7 +409,6 @@ namespace SuperMarket {
 				if (!cartGrid->Rows[index]->IsNewRow) {
 					cartGrid->Rows->RemoveAt(index);
 					cart->clearCart();
-					// Re-add remaining items
 					for (int i = 0; i < cartGrid->Rows->Count; i++) {
 						if (!cartGrid->Rows[i]->IsNewRow) {
 							int id = Convert::ToInt32(cartGrid->Rows[i]->Cells["colID"]->Value);
@@ -431,12 +425,13 @@ namespace SuperMarket {
 			}
 		}
 	}
+
 	private: System::Void CartForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-		if (e->KeyCode == Keys::F1) button1->PerformClick();    // F1 = Add Item
-		if (e->KeyCode == Keys::F2) button2->PerformClick();    // F2 = Remove Item
-		if (e->KeyCode == Keys::F3) button3->PerformClick();    // F3 = Clear Cart
-		if (e->KeyCode == Keys::F4) btnBilling->PerformClick(); // F4 = Proceed to Billing
-		if (e->KeyCode == Keys::F5) btnSettings->PerformClick();// F5 = Settings
+		if (e->KeyCode == Keys::F1) button1->PerformClick();
+		if (e->KeyCode == Keys::F2) button2->PerformClick();
+		if (e->KeyCode == Keys::F3) button3->PerformClick();
+		if (e->KeyCode == Keys::F4) btnBilling->PerformClick();
+		if (e->KeyCode == Keys::F5) btnSettings->PerformClick();
 	}
 	};
 }
