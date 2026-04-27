@@ -7,6 +7,6 @@ int main(cli::array<String^>^ args)
 {
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
-    Application::Run(gcnew SuperMarket::CartForm("Admin"));
+    Application::Run(gcnew SuperMarket::CartForm("admin"));
     return 0;
 }

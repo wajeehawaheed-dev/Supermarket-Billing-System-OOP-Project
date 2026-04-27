@@ -24,7 +24,7 @@ namespace SuperMarket {
 			currentRole = role;
 			// Hide Settings if not Admin
 			if (currentRole->ToLower() != "admin") {
-				btnSettings->Enabled = false;
+				btnSettings->Visible = false;
 			}
 
 			// Load settings from DB
