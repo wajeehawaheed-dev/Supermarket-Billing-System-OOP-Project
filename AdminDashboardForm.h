@@ -4,6 +4,7 @@
 #include "SalesReportForm.h"
 #include "BestSellersForm.h"
 #include "PaymentMethodForm.h"
+#include "SettingsForm.h"
 namespace SUper {
 
 	using namespace System;
@@ -318,10 +319,8 @@ namespace SUper {
 	}
 
 	private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
-		MessageBox::Show("Settings form coming soon.",
-			"Coming Soon",
-			MessageBoxButtons::OK,
-			MessageBoxIcon::Information);
+		SettingsForm^ form = gcnew SettingsForm();
+		form->ShowDialog();
 	}
 
 	private: System::Void btnPayments_Click(System::Object^ sender, System::EventArgs^ e) {

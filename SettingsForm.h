@@ -2,11 +2,13 @@
 #include "constants.h"
 #include "database.h"
 
-namespace SuperMarket {
+namespace SUper {
 
 	using namespace System;
 	using namespace System::Windows::Forms;
 	using namespace System::Drawing;
+	using namespace System::Data;
+	using namespace System::Data::SqlClient;
 
 	public ref class SettingsForm : public System::Windows::Forms::Form
 	{
@@ -14,7 +16,6 @@ namespace SuperMarket {
 		SettingsForm(void)
 		{
 			InitializeComponent();
-			// Load current values into textboxes
 			txtTax->Text = TAX_RATE.ToString();
 			txtThreshold1->Text = DISCOUNT_THRESHOLD_1.ToString();
 			txtDiscount1->Text = DISCOUNT_RATE_1.ToString();
@@ -58,13 +59,11 @@ namespace SuperMarket {
 			this->btnCancel = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 
-			// Form
 			this->Text = "ValueMart - Admin Settings";
 			this->Size = System::Drawing::Size(480, 480);
 			this->StartPosition = FormStartPosition::CenterScreen;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 
-			// Title Header
 			this->lblTitle->Location = System::Drawing::Point(0, 0);
 			this->lblTitle->Size = System::Drawing::Size(480, 65);
 			this->lblTitle->Font = (gcnew System::Drawing::Font(L"Arial", 15, System::Drawing::FontStyle::Bold));
@@ -73,7 +72,6 @@ namespace SuperMarket {
 			this->lblTitle->Text = "Admin Settings";
 			this->lblTitle->TextAlign = ContentAlignment::MiddleCenter;
 
-			// Tax Rate
 			this->lblTax->Text = "Tax Rate (e.g. 0.17):";
 			this->lblTax->Location = System::Drawing::Point(30, 100);
 			this->lblTax->Size = System::Drawing::Size(200, 25);
@@ -82,7 +80,6 @@ namespace SuperMarket {
 			this->txtTax->Size = System::Drawing::Size(150, 25);
 			this->txtTax->Font = (gcnew System::Drawing::Font(L"Arial", 10));
 
-			// Threshold 1
 			this->lblThreshold1->Text = "Discount 1 - Min Items:";
 			this->lblThreshold1->Location = System::Drawing::Point(30, 150);
 			this->lblThreshold1->Size = System::Drawing::Size(200, 25);
@@ -91,7 +88,6 @@ namespace SuperMarket {
 			this->txtThreshold1->Size = System::Drawing::Size(150, 25);
 			this->txtThreshold1->Font = (gcnew System::Drawing::Font(L"Arial", 10));
 
-			// Discount Rate 1
 			this->lblDiscount1->Text = "Discount 1 - Rate (e.g. 0.10):";
 			this->lblDiscount1->Location = System::Drawing::Point(30, 200);
 			this->lblDiscount1->Size = System::Drawing::Size(200, 25);
@@ -100,7 +96,6 @@ namespace SuperMarket {
 			this->txtDiscount1->Size = System::Drawing::Size(150, 25);
 			this->txtDiscount1->Font = (gcnew System::Drawing::Font(L"Arial", 10));
 
-			// Threshold 2
 			this->lblThreshold2->Text = "Discount 2 - Min Items:";
 			this->lblThreshold2->Location = System::Drawing::Point(30, 250);
 			this->lblThreshold2->Size = System::Drawing::Size(200, 25);
@@ -109,7 +104,6 @@ namespace SuperMarket {
 			this->txtThreshold2->Size = System::Drawing::Size(150, 25);
 			this->txtThreshold2->Font = (gcnew System::Drawing::Font(L"Arial", 10));
 
-			// Discount Rate 2
 			this->lblDiscount2->Text = "Discount 2 - Rate (e.g. 0.20):";
 			this->lblDiscount2->Location = System::Drawing::Point(30, 300);
 			this->lblDiscount2->Size = System::Drawing::Size(200, 25);
@@ -118,7 +112,6 @@ namespace SuperMarket {
 			this->txtDiscount2->Size = System::Drawing::Size(150, 25);
 			this->txtDiscount2->Font = (gcnew System::Drawing::Font(L"Arial", 10));
 
-			// Save Button
 			this->btnSave->Text = "Save Settings (F4)";
 			this->btnSave->Location = System::Drawing::Point(260, 390);
 			this->btnSave->Size = System::Drawing::Size(150, 38);
@@ -128,7 +121,6 @@ namespace SuperMarket {
 			this->btnSave->Font = (gcnew System::Drawing::Font(L"Arial", 10, System::Drawing::FontStyle::Bold));
 			this->btnSave->Click += gcnew System::EventHandler(this, &SettingsForm::btnSave_Click);
 
-			// Cancel Button
 			this->btnCancel->Text = "Cancel (esc)";
 			this->btnCancel->Location = System::Drawing::Point(60, 390);
 			this->btnCancel->Size = System::Drawing::Size(120, 38);
@@ -138,7 +130,6 @@ namespace SuperMarket {
 			this->btnCancel->Font = (gcnew System::Drawing::Font(L"Arial", 10, System::Drawing::FontStyle::Bold));
 			this->btnCancel->Click += gcnew System::EventHandler(this, &SettingsForm::btnCancel_Click);
 
-			// Add controls
 			this->Controls->Add(this->lblTitle);
 			this->Controls->Add(this->lblTax);
 			this->Controls->Add(this->txtTax);
@@ -163,20 +154,20 @@ namespace SuperMarket {
 			double tax, d1, d2;
 			int t1, t2;
 
-			if (!Double::TryParse(txtTax->Text, tax) || tax <= 0) {
-				MessageBox::Show("Invalid tax rate!", "Error"); return;
+			if (!Double::TryParse(txtTax->Text, tax) || tax <= 0 || tax >= 1) {
+				MessageBox::Show("Invalid tax rate! Must be between 0 and 1 (e.g. 0.17)", "Error"); return;
 			}
 			if (!Int32::TryParse(txtThreshold1->Text, t1) || t1 <= 0) {
 				MessageBox::Show("Invalid Discount 1 threshold!", "Error"); return;
 			}
-			if (!Double::TryParse(txtDiscount1->Text, d1) || d1 <= 0) {
-				MessageBox::Show("Invalid Discount 1 rate!", "Error"); return;
+			if (!Double::TryParse(txtDiscount1->Text, d1) || d1 <= 0 || d1 >= 1) {
+				MessageBox::Show("Invalid Discount 1 rate! Must be between 0 and 1", "Error"); return;
 			}
 			if (!Int32::TryParse(txtThreshold2->Text, t2) || t2 <= t1) {
 				MessageBox::Show("Discount 2 threshold must be greater than Discount 1!", "Error"); return;
 			}
-			if (!Double::TryParse(txtDiscount2->Text, d2) || d2 <= d1) {
-				MessageBox::Show("Discount 2 rate must be greater than Discount 1!", "Error"); return;
+			if (!Double::TryParse(txtDiscount2->Text, d2) || d2 <= d1 || d2 >= 1) {
+				MessageBox::Show("Discount 2 rate must be greater than Discount 1 and less than 1!", "Error"); return;
 			}
 
 			TAX_RATE = tax;
@@ -185,11 +176,26 @@ namespace SuperMarket {
 			DISCOUNT_THRESHOLD_2 = t2;
 			DISCOUNT_RATE_2 = d2;
 
-			SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + tax.ToString() + "' WHERE SettingName = 'TAX_RATE'");
-			SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + t1.ToString() + "' WHERE SettingName = 'DISCOUNT_THRESHOLD_1'");
-			SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + d1.ToString() + "' WHERE SettingName = 'DISCOUNT_RATE_1'");
-			SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + t2.ToString() + "' WHERE SettingName = 'DISCOUNT_THRESHOLD_2'");
-			SBS::Database::ExecuteNonQuery("UPDATE Settings SET SettingValue = '" + d2.ToString() + "' WHERE SettingName = 'DISCOUNT_RATE_2'");
+			SBS::Database::ExecuteNonQuery(
+				"UPDATE Settings SET SettingValue = @v WHERE SettingName = @k",
+				gcnew SqlParameter("@v", tax.ToString()),
+				gcnew SqlParameter("@k", "TAX_RATE"));
+			SBS::Database::ExecuteNonQuery(
+				"UPDATE Settings SET SettingValue = @v WHERE SettingName = @k",
+				gcnew SqlParameter("@v", t1.ToString()),
+				gcnew SqlParameter("@k", "DISCOUNT_THRESHOLD_1"));
+			SBS::Database::ExecuteNonQuery(
+				"UPDATE Settings SET SettingValue = @v WHERE SettingName = @k",
+				gcnew SqlParameter("@v", d1.ToString()),
+				gcnew SqlParameter("@k", "DISCOUNT_RATE_1"));
+			SBS::Database::ExecuteNonQuery(
+				"UPDATE Settings SET SettingValue = @v WHERE SettingName = @k",
+				gcnew SqlParameter("@v", t2.ToString()),
+				gcnew SqlParameter("@k", "DISCOUNT_THRESHOLD_2"));
+			SBS::Database::ExecuteNonQuery(
+				"UPDATE Settings SET SettingValue = @v WHERE SettingName = @k",
+				gcnew SqlParameter("@v", d2.ToString()),
+				gcnew SqlParameter("@k", "DISCOUNT_RATE_2"));
 
 			MessageBox::Show("Settings saved successfully!", "Success");
 			this->Close();
@@ -198,9 +204,10 @@ namespace SuperMarket {
 		System::Void btnCancel_Click(System::Object^ sender, System::EventArgs^ e) {
 			this->Close();
 		}
+
 	private: System::Void SettingsForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
-		if (e->KeyCode == Keys::F4)     btnSave->PerformClick();     // F4 = Save
-		if (e->KeyCode == Keys::Escape) btnCancel->PerformClick();   // Escape = Cancel
+		if (e->KeyCode == Keys::F4)     btnSave->PerformClick();
+		if (e->KeyCode == Keys::Escape) btnCancel->PerformClick();
 		e->Handled = true;
 	}
 	};

@@ -119,9 +119,11 @@ namespace SUper {
 			this->Name = L"BestSellersForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Best Sellers - ValueMart";
+			this->Load += gcnew System::EventHandler(this, &BestSellersForm::BestSellersForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgvBestSellers))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 #pragma endregion
 
@@ -150,5 +152,7 @@ namespace SUper {
 
 			   dgvBestSellers->DataSource = result;
 		   }
-	};
+	private: System::Void BestSellersForm_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }

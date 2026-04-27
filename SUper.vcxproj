@@ -137,6 +137,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="session.h" />
+    <ClInclude Include="SettingsForm.h" />
     <ClInclude Include="shared.h" />
   </ItemGroup>
   <ItemGroup>
@@ -149,10 +150,12 @@
   <ItemGroup>
     <ClCompile Include="AdminDashboardForm.cpp" />
     <ClCompile Include="BestSellersForm.cpp" />
+    <ClCompile Include="files\constants.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PaymentMethodForm.cpp" />
     <ClCompile Include="SalesReportForm.cpp" />
+    <ClCompile Include="SettingsForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AdminDashboardForm.resx">
