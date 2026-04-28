@@ -11,7 +11,7 @@ private:
 public:
 	Billing(Cart* cart) {
 		subtotal = cart->getSubTotal();
-		itemCount = cart->getItems().size();
+		itemCount = cart->getCount();
 		if(itemCount >= DISCOUNT_THRESHOLD_2) {
 			discount = subtotal * DISCOUNT_RATE_2;
 		}

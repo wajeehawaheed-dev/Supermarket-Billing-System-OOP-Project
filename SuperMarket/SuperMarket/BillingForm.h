@@ -1,8 +1,6 @@
 #pragma once
 #include "Billing.h"
 #include "database.h"
-#include <vector>
-using namespace std;
 namespace SuperMarket {
 
 	using namespace System;
@@ -46,7 +44,8 @@ namespace SuperMarket {
 		System::Windows::Forms::Label^ lblTax;
 		System::Windows::Forms::Label^ lblGrandTotal;
 		System::Windows::Forms::Button^ btnProceed;
-		System::Windows::Forms::Button^ btnBack;
+	private: System::Windows::Forms::Panel^ divider;
+		   System::Windows::Forms::Button^ btnBack;
 
 		void InitializeComponent(void)
 		{
@@ -57,85 +56,118 @@ namespace SuperMarket {
 			this->lblGrandTotal = (gcnew System::Windows::Forms::Label());
 			this->btnProceed = (gcnew System::Windows::Forms::Button());
 			this->btnBack = (gcnew System::Windows::Forms::Button());
+			this->divider = (gcnew System::Windows::Forms::Panel());
 			this->SuspendLayout();
-
-			// Form
-			this->Text = "ValueMart - Billing Summary";
-			this->Size = System::Drawing::Size(500, 450);
-			this->StartPosition = FormStartPosition::CenterScreen;
-			this->BackColor = System::Drawing::Color::WhiteSmoke;
-
-			// Store Name
-			this->lblStoreName->Location = System::Drawing::Point(0, 0);
-			this->lblStoreName->Size = System::Drawing::Size(500, 70);
+			// 
+			// lblStoreName
+			// 
+			this->lblStoreName->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(94)),
+				static_cast<System::Int32>(static_cast<System::Byte>(32)));
 			this->lblStoreName->Font = (gcnew System::Drawing::Font(L"Arial", 16, System::Drawing::FontStyle::Bold));
 			this->lblStoreName->ForeColor = System::Drawing::Color::White;
-			this->lblStoreName->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
-			this->lblStoreName->TextAlign = ContentAlignment::MiddleCenter;
-
-			// Subtotal
-			this->lblSubtotal->Location = System::Drawing::Point(80, 110);
-			this->lblSubtotal->Size = System::Drawing::Size(340, 30);
+			this->lblStoreName->Location = System::Drawing::Point(0, 0);
+			this->lblStoreName->Name = L"lblStoreName";
+			this->lblStoreName->Size = System::Drawing::Size(500, 70);
+			this->lblStoreName->TabIndex = 0;
+			// 
+			// lblSubtotal
+			// 
 			this->lblSubtotal->Font = (gcnew System::Drawing::Font(L"Arial", 11));
-			this->lblSubtotal->ForeColor = System::Drawing::Color::FromArgb(33, 33, 33);
-
-			// Discount
-			this->lblDiscount->Location = System::Drawing::Point(80, 150);
-			this->lblDiscount->Size = System::Drawing::Size(340, 30);
+			this->lblSubtotal->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(33)), static_cast<System::Int32>(static_cast<System::Byte>(33)),
+				static_cast<System::Int32>(static_cast<System::Byte>(33)));
+			this->lblSubtotal->Location = System::Drawing::Point(80, 110);
+			this->lblSubtotal->Name = L"lblSubtotal";
+			this->lblSubtotal->Size = System::Drawing::Size(340, 30);
+			this->lblSubtotal->TabIndex = 1;
+			// 
+			// lblDiscount
+			// 
 			this->lblDiscount->Font = (gcnew System::Drawing::Font(L"Arial", 11));
-			this->lblDiscount->ForeColor = System::Drawing::Color::FromArgb(198, 40, 40);
-
-			// Tax
-			this->lblTax->Location = System::Drawing::Point(80, 190);
-			this->lblTax->Size = System::Drawing::Size(340, 30);
+			this->lblDiscount->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(198)), static_cast<System::Int32>(static_cast<System::Byte>(40)),
+				static_cast<System::Int32>(static_cast<System::Byte>(40)));
+			this->lblDiscount->Location = System::Drawing::Point(80, 150);
+			this->lblDiscount->Name = L"lblDiscount";
+			this->lblDiscount->Size = System::Drawing::Size(340, 30);
+			this->lblDiscount->TabIndex = 2;
+			// 
+			// lblTax
+			// 
 			this->lblTax->Font = (gcnew System::Drawing::Font(L"Arial", 11));
-			this->lblTax->ForeColor = System::Drawing::Color::FromArgb(33, 33, 33);
-
-			// Divider panel
-			System::Windows::Forms::Panel^ divider = gcnew System::Windows::Forms::Panel();
-			divider->Location = System::Drawing::Point(80, 235);
-			divider->Size = System::Drawing::Size(340, 2);
-			divider->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
-
-			// Grand Total
-			this->lblGrandTotal->Location = System::Drawing::Point(80, 245);
-			this->lblGrandTotal->Size = System::Drawing::Size(340, 40);
+			this->lblTax->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(33)), static_cast<System::Int32>(static_cast<System::Byte>(33)),
+				static_cast<System::Int32>(static_cast<System::Byte>(33)));
+			this->lblTax->Location = System::Drawing::Point(80, 190);
+			this->lblTax->Name = L"lblTax";
+			this->lblTax->Size = System::Drawing::Size(340, 30);
+			this->lblTax->TabIndex = 3;
+			this->lblTax->Click += gcnew System::EventHandler(this, &BillingForm::lblTax_Click);
+			// 
+			// lblGrandTotal
+			// 
 			this->lblGrandTotal->Font = (gcnew System::Drawing::Font(L"Arial", 14, System::Drawing::FontStyle::Bold));
-			this->lblGrandTotal->ForeColor = System::Drawing::Color::FromArgb(27, 94, 32);
-
-			// Back Button
-			this->btnBack->Location = System::Drawing::Point(30, 340);
-			this->btnBack->Size = System::Drawing::Size(160, 38);
-			this->btnBack->Text = L"Back to Cart (esc)";
-			this->btnBack->BackColor = System::Drawing::Color::FromArgb(66, 66, 66);
-			this->btnBack->ForeColor = System::Drawing::Color::White;
-			this->btnBack->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->btnBack->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold));
-			this->btnBack->Click += gcnew System::EventHandler(this, &BillingForm::btnBack_Click);
-
-			// Proceed Button
-			this->btnProceed->Location = System::Drawing::Point(260, 340);
-			this->btnProceed->Size = System::Drawing::Size(210, 38);
-			this->btnProceed->Text = L"Proceed to Payment (F4)";
-			this->btnProceed->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
-			this->btnProceed->ForeColor = System::Drawing::Color::White;
+			this->lblGrandTotal->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(94)),
+				static_cast<System::Int32>(static_cast<System::Byte>(32)));
+			this->lblGrandTotal->Location = System::Drawing::Point(80, 245);
+			this->lblGrandTotal->Name = L"lblGrandTotal";
+			this->lblGrandTotal->Size = System::Drawing::Size(340, 40);
+			this->lblGrandTotal->TabIndex = 5;
+			// 
+			// btnProceed
+			// 
+			this->btnProceed->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(94)),
+				static_cast<System::Int32>(static_cast<System::Byte>(32)));
 			this->btnProceed->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->btnProceed->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold));
+			this->btnProceed->ForeColor = System::Drawing::Color::White;
+			this->btnProceed->Location = System::Drawing::Point(260, 340);
+			this->btnProceed->Name = L"btnProceed";
+			this->btnProceed->Size = System::Drawing::Size(210, 38);
+			this->btnProceed->TabIndex = 7;
+			this->btnProceed->Text = L"Proceed to Payment (F4)";
+			this->btnProceed->UseVisualStyleBackColor = false;
 			this->btnProceed->Click += gcnew System::EventHandler(this, &BillingForm::btnProceed_Click);
-
-			// Add controls
+			// 
+			// btnBack
+			// 
+			this->btnBack->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(66)), static_cast<System::Int32>(static_cast<System::Byte>(66)),
+				static_cast<System::Int32>(static_cast<System::Byte>(66)));
+			this->btnBack->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->btnBack->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold));
+			this->btnBack->ForeColor = System::Drawing::Color::White;
+			this->btnBack->Location = System::Drawing::Point(30, 340);
+			this->btnBack->Name = L"btnBack";
+			this->btnBack->Size = System::Drawing::Size(160, 38);
+			this->btnBack->TabIndex = 6;
+			this->btnBack->Text = L"Back to Cart (esc)";
+			this->btnBack->UseVisualStyleBackColor = false;
+			this->btnBack->Click += gcnew System::EventHandler(this, &BillingForm::btnBack_Click);
+			// 
+			// divider
+			// 
+			this->divider->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(94)),
+				static_cast<System::Int32>(static_cast<System::Byte>(32)));
+			this->divider->Location = System::Drawing::Point(80, 235);
+			this->divider->Name = L"divider";
+			this->divider->Size = System::Drawing::Size(340, 2);
+			this->divider->TabIndex = 4;
+			// 
+			// BillingForm
+			// 
+			this->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->ClientSize = System::Drawing::Size(478, 394);
 			this->Controls->Add(this->lblStoreName);
 			this->Controls->Add(this->lblSubtotal);
 			this->Controls->Add(this->lblDiscount);
 			this->Controls->Add(this->lblTax);
-			this->Controls->Add(divider);
+			this->Controls->Add(this->divider);
 			this->Controls->Add(this->lblGrandTotal);
 			this->Controls->Add(this->btnBack);
 			this->Controls->Add(this->btnProceed);
 			this->KeyPreview = true;
+			this->Name = L"BillingForm";
+			this->Text = L"ValueMart - Billing Summary";
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &BillingForm::BillingForm_KeyDown);
-
 			this->ResumeLayout(false);
+
 		}
 
 	private:
@@ -160,8 +192,9 @@ namespace SuperMarket {
 			int billNo = Convert::ToInt32(result);
 
 			// Insert each item into BillItems
-			vector<CartItem> items = savedCart->getItems();
-			for (int i = 0; i < items.size(); i++) {
+			CartItem* items = savedCart->getItems();
+			int itemCount = savedCart->getCount();
+			for (int i = 0; i < itemCount; i++) {
 				String^ itemSQL = String::Format(
 					"INSERT INTO BillItems (BillNo, ProductID, Quantity, Price) "
 					"VALUES ({0}, {1}, {2}, {3})",
@@ -183,5 +216,7 @@ namespace SuperMarket {
 		if (e->KeyCode == Keys::Escape) btnBack->PerformClick();     // Escape = Back to Cart
 		e->Handled = true;
 	}
-	};
+	private: System::Void lblTax_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }
