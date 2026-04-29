@@ -135,6 +135,7 @@
     </ClInclude>
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
+    <ClInclude Include="SearchForm.h" />
     <ClInclude Include="SettingsForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

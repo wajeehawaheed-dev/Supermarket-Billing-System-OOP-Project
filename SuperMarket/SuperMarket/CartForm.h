@@ -4,6 +4,7 @@
 #include "BillingForm.h"
 #include "SettingsForm.h"
 #include "database.h"
+#include "SearchForm.h"
 
 namespace SuperMarket {
 
@@ -22,12 +23,11 @@ namespace SuperMarket {
 			InitializeComponent();
 			cart = new Cart();
 			currentRole = role;
-			// Hide Settings if not Admin
+
 			if (currentRole->ToLower() != "admin") {
 				btnSettings->Visible = false;
 			}
 
-			// Load settings from DB
 			DataTable^ settings = SBS::Database::ExecuteQuery(
 				"SELECT SettingName, SettingValue FROM Settings");
 			for (int i = 0; i < settings->Rows->Count; i++) {
@@ -50,10 +50,10 @@ namespace SuperMarket {
 		}
 
 	private: System::Windows::Forms::Panel^ headerPanel;
-	private: String^ currentRole;
 	private: System::Windows::Forms::Label^ lblHeader;
 	private: System::Windows::Forms::DataGridView^ cartGrid;
 	private: Cart* cart;
+	private: String^ currentRole;
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button3;
@@ -296,67 +296,14 @@ namespace SuperMarket {
 	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		Form^ searchForm = gcnew Form();
-		searchForm->Text = "Add Item";
-		searchForm->Size = System::Drawing::Size(350, 180);
-		searchForm->StartPosition = FormStartPosition::CenterParent;
-		searchForm->BackColor = System::Drawing::Color::WhiteSmoke;
-
-		Label^ lblName = gcnew Label();
-		lblName->Text = "Product Name:";
-		lblName->Location = System::Drawing::Point(20, 20);
-		lblName->Size = System::Drawing::Size(110, 25);
-
-		TextBox^ txtName = gcnew TextBox();
-		txtName->Location = System::Drawing::Point(140, 20);
-		txtName->Size = System::Drawing::Size(150, 25);
-
-		Label^ lblQty = gcnew Label();
-		lblQty->Text = "Quantity:";
-		lblQty->Location = System::Drawing::Point(20, 60);
-		lblQty->Size = System::Drawing::Size(110, 25);
-
-		TextBox^ txtQty = gcnew TextBox();
-		txtQty->Location = System::Drawing::Point(140, 60);
-		txtQty->Size = System::Drawing::Size(80, 25);
-
-		Button^ btnOK = gcnew Button();
-		btnOK->Text = "Add to Cart";
-		btnOK->Location = System::Drawing::Point(140, 100);
-		btnOK->Size = System::Drawing::Size(150, 30);
-		btnOK->BackColor = System::Drawing::Color::FromArgb(27, 94, 32);
-		btnOK->ForeColor = System::Drawing::Color::White;
-		btnOK->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
-
-		searchForm->Controls->Add(lblName);
-		searchForm->Controls->Add(txtName);
-		searchForm->Controls->Add(lblQty);
-		searchForm->Controls->Add(txtQty);
-		searchForm->Controls->Add(btnOK);
-		searchForm->AcceptButton = btnOK;
-
-		if (searchForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-			if (txtName->Text == "" || txtQty->Text == "") {
-				MessageBox::Show("Please fill all fields!", "Error"); return;
-			}
-			int qty;
-			if (!Int32::TryParse(txtQty->Text, qty) || qty <= 0) {
-				MessageBox::Show("Quantity must be a valid number greater than 0!", "Error"); return;
-			}
-			String^ sql = "SELECT ProductID, Name, Price, Stock FROM Products WHERE Name LIKE '%" + txtName->Text + "%' AND IsActive = 1";
-			DataTable^ result = SBS::Database::ExecuteQuery(sql);
-			if (result->Rows->Count == 0) {
-				MessageBox::Show("Product not found in database!", "Error"); return;
-			}
-			int stock = Convert::ToInt32(result->Rows[0]["Stock"]);
-			if (qty > stock) {
-				MessageBox::Show("Not enough stock! Available: " + stock, "Error"); return;
-			}
-			int id = Convert::ToInt32(result->Rows[0]["ProductID"]);
-			String^ name = result->Rows[0]["Name"]->ToString();
-			double price = Convert::ToDouble(result->Rows[0]["Price"]);
-			double total = price * qty;
+		SearchForm^ search = gcnew SearchForm();
+		if (search->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+			int     id = search->SelectedProductID;
+			String^ name = search->SelectedName;
+			double  price = search->SelectedPrice;
+			int qty = search->SelectedQty;
+			if (id == -1 || qty <= 0) return;
+			double  total = price * qty;
 			cartGrid->Rows->Add(id, name, price, qty, total);
 			std::string stdName = "";
 			for (int i = 0; i < name->Length; i++) stdName += (char)name[i];
@@ -393,10 +340,8 @@ namespace SuperMarket {
 
 	private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (currentRole->ToLower() != "admin") {
-			MessageBox::Show("Access Denied! Admin only.", "Security");
-			return;
+			MessageBox::Show("Access Denied! Admin only.", "Security"); return;
 		}
-
 		SettingsForm^ settings = gcnew SettingsForm();
 		settings->ShowDialog();
 		UpdateTotals();
@@ -411,9 +356,9 @@ namespace SuperMarket {
 					cart->clearCart();
 					for (int i = 0; i < cartGrid->Rows->Count; i++) {
 						if (!cartGrid->Rows[i]->IsNewRow) {
-							int id = Convert::ToInt32(cartGrid->Rows[i]->Cells["colID"]->Value);
-							double price = Convert::ToDouble(cartGrid->Rows[i]->Cells["colPrice"]->Value);
-							int qty = Convert::ToInt32(cartGrid->Rows[i]->Cells["colQty"]->Value);
+							int     id = Convert::ToInt32(cartGrid->Rows[i]->Cells["colID"]->Value);
+							double  price = Convert::ToDouble(cartGrid->Rows[i]->Cells["colPrice"]->Value);
+							int     qty = Convert::ToInt32(cartGrid->Rows[i]->Cells["colQty"]->Value);
 							String^ name = cartGrid->Rows[i]->Cells["colName"]->Value->ToString();
 							std::string stdName = "";
 							for (int j = 0; j < name->Length; j++) stdName += (char)name[j];

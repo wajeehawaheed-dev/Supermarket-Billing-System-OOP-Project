@@ -68,6 +68,7 @@ namespace SuperMarket {
 			this->lblStoreName->Location = System::Drawing::Point(0, 0);
 			this->lblStoreName->Name = L"lblStoreName";
 			this->lblStoreName->Size = System::Drawing::Size(500, 70);
+			this->lblStoreName->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right);
 			this->lblStoreName->TabIndex = 0;
 			// 
 			// lblSubtotal
@@ -119,6 +120,7 @@ namespace SuperMarket {
 			this->btnProceed->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold));
 			this->btnProceed->ForeColor = System::Drawing::Color::White;
 			this->btnProceed->Location = System::Drawing::Point(260, 340);
+			this->btnProceed->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
 			this->btnProceed->Name = L"btnProceed";
 			this->btnProceed->Size = System::Drawing::Size(210, 38);
 			this->btnProceed->TabIndex = 7;
@@ -134,6 +136,7 @@ namespace SuperMarket {
 			this->btnBack->Font = (gcnew System::Drawing::Font(L"Arial", 9, System::Drawing::FontStyle::Bold));
 			this->btnBack->ForeColor = System::Drawing::Color::White;
 			this->btnBack->Location = System::Drawing::Point(30, 340);
+			this->btnBack->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
 			this->btnBack->Name = L"btnBack";
 			this->btnBack->Size = System::Drawing::Size(160, 38);
 			this->btnBack->TabIndex = 6;
@@ -153,6 +156,10 @@ namespace SuperMarket {
 			// BillingForm
 			// 
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->ClientSize = System::Drawing::Size(478, 394);
+			this->MaximizeBox = false;
+			this->WindowState = System::Windows::Forms::FormWindowState::Normal;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->ClientSize = System::Drawing::Size(478, 394);
 			this->Controls->Add(this->lblStoreName);
 			this->Controls->Add(this->lblSubtotal);

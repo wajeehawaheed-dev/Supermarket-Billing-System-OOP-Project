@@ -61,6 +61,8 @@ namespace SuperMarket {
 			// Form
 			this->Text = "ValueMart - Admin Settings";
 			this->Size = System::Drawing::Size(480, 480);
+			this->MinimumSize = System::Drawing::Size(480, 480);
+			this->MaximizeBox = false;
 			this->StartPosition = FormStartPosition::CenterScreen;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 
