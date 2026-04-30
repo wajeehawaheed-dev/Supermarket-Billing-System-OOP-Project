@@ -20,7 +20,7 @@ namespace SUper {
     public ref class ProductsForm : public System::Windows::Forms::Form
     {
     private:
-        ProductManager* pm;
+        ProductManager^ pm;
         DataTable^ dtProducts;
 
         System::Windows::Forms::DataGridView^ dgvProducts;
@@ -35,7 +35,7 @@ namespace SUper {
 
     public:
         ProductsForm(void) {
-            pm = new ProductManager();
+            pm = gcnew ProductManager();
             dtProducts = nullptr;
             InitializeComponent();
             loadGrid();
@@ -43,7 +43,7 @@ namespace SUper {
 
     protected:
         ~ProductsForm() {
-            if (pm) { delete pm; pm = nullptr; }
+            // GC handles cleanup
         }
 
     private:

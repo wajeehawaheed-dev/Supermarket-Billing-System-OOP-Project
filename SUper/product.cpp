@@ -1,313 +1,258 @@
 //MEMBER 2 Product & ProductManager Class codes
 #include "product.h"
-#include <iostream>
-//#include <fstream> no need for file handling test, since DBMS is integrated
-using namespace std;
+
+using namespace System;
+using namespace System::Data;
+using namespace System::Data::SqlClient;
+using namespace System::Windows::Forms;
 
 //---Product class implementations---
 
-Product::Product(int id, string n, string cat, double p, int s) //Constructor
+Product::Product(int id, String^ n, String^ cat, double p, int s)
 {
-    productID = id;  name = n;  category = cat;
-    price = p;  stock = s;  isActive = true;
+    productID = id;
+    name = n;
+    category = cat;
+    price = p;
+    stock = s;
+    isActive = true;
 }
 
-//Utility
-void Product::display() const
+void Product::display()
 {
-    cout << "ID: " << productID;
-    cout << " | Name: " << name;
-    cout << " | Category: " << category;
-    cout << " | Price (Rs." << price << ") ";
-    cout << " | Stock: " << stock << endl;
+    // Show in MessageBox since this is a WinForms app, not console
+    MessageBox::Show(
+        "ID: " + productID +
+        "\nName: " + name +
+        "\nCategory: " + category +
+        "\nPrice: Rs." + price +
+        "\nStock: " + stock,
+        "Product Details");
 }
-bool Product::isLowStock(int threshold) const
-{                               //agar stock 5 se kam hua toh error message(value 5 hardcoded in product.h)
+
+bool Product::isLowStock(int threshold)
+{
     return stock < threshold;
 }
 
-//Getters
-int Product::getID() const { return productID; }
-string Product::getName() const { return name; }
-string Product::getCategory() const { return category; }
-double Product::getPrice() const { return price; }
-int Product::getStock() const { return stock; }
-bool Product::getIsActive() const { return isActive; }
-
-// setters
-void Product::setName(string n)
+bool Product::isLowStock()
 {
-    name = n;
-}
-void Product::setCategory(string c)
-{
-    category = c;
-}
-void Product::setPrice(double p)
-{
-    if (p > 0)
-        price = p;
-}
-void Product::setStock(int s)
-{
-    if (s >= 0)
-        stock = s;
-}
-void Product::setIsActive(bool status)
-{
-    isActive = status;
+    return stock < 5;  // default threshold
 }
 
+int Product::getID() { return productID; }
+String^ Product::getName() { return name; }
+String^ Product::getCategory() { return category; }
+double Product::getPrice() { return price; }
+int Product::getStock() { return stock; }
+bool Product::getIsActive() { return isActive; }
 
+void Product::setName(String^ n) { name = n; }
+void Product::setCategory(String^ c) { category = c; }
+void Product::setPrice(double p) { if (p > 0) price = p; }
+void Product::setStock(int s) { if (s >= 0) stock = s; }
+void Product::setIsActive(bool status) { isActive = status; }
 
 
 //--- ProductManager implementations ---
-ProductManager::ProductManager() //constructors
-{
-    capacity = 10;                        //start with space for 10 products
-    count = 0;
-    //nextID = 1;       // always starts at 1**************************************************************
 
-    products = new Product * [capacity];    //allocate array of pointers
-    for (int i = 0; i < capacity; i++)
-        products[i] = nullptr;    // critical — set all to nullptr for dealing with ID:0 problem
+ProductManager::ProductManager()
+{
+    products = gcnew List<Product^>();
 }
 
-ProductManager::~ProductManager() //Destructor
+// Add product (in-memory)
+void ProductManager::addProduct(String^ name, String^ category, double price, int stock)
 {
-    for (int i = 0; i < count; i++)
-        delete products[i];       //delete each Product object
-    delete[] products;            //delete the array itself
-}
-
-void ProductManager::resize()
-{
-    capacity *= 2;
-    Product** newArr = new Product * [capacity];   //allocate bigger array
-
-    for (int i = 0; i < capacity; i++)
-        newArr[i] = nullptr;      // initialize new slots too, dealing with ID:0 problem
-    for (int i = 0; i < count; i++)
-        newArr[i] = products[i];                 //copy pointers over
-
-    delete[] products;                           //free old array
-    products = newArr;                           //point to new array
-}
-
-
-
-
-//•	Add new product to the system
-void ProductManager::addProduct(string name, string category, double price, int stock)
-{
-    if (price <= 0 || stock < 0)    //price / stock 0 se kam nahi hosaktay
-    {
-        cout << "INVALID price or stock";
+    if (price <= 0 || stock < 0) {
+        MessageBox::Show("Invalid price or stock");
         return;
     }
-    if (count == capacity)
-        resize();                                //regrow if full
-    products[count] = new Product(count + 1, name, category, price, stock);//nextID ki jagah count+1************************
-    count++;
-    cout << "Product added successfully!" << endl;
+    int newID = products->Count + 1;
+    products->Add(gcnew Product(newID, name, category, price, stock));
 }
 
-
-//•	Update existing product (name, price, category)
-void ProductManager::updateProduct(int id, string name, string category, double price)
+void ProductManager::updateProduct(int id, String^ name, String^ category, double price)
 {
-    Product* p = searchByID(id);
-    if (p == nullptr)
-    {
-        cout << "ERROR: Product not found!";
+    Product^ p = searchByID(id);
+    if (p == nullptr) {
+        MessageBox::Show("Product not found");
         return;
     }
     p->setName(name);
     p->setCategory(category);
     p->setPrice(price);
-    cout << "Product updated successfully!" << endl;
 }
 
-
-//•	Delete/deactivate product
 void ProductManager::deleteProduct(int id)
 {
-    Product* p = searchByID(id);
-    if (p == nullptr)
-    {
-        cout << "ERROR: Product not found!";
+    Product^ p = searchByID(id);
+    if (p == nullptr) {
+        MessageBox::Show("Product not found");
         return;
     }
-    p->setIsActive(false);   //soft delete, memory stays allocated
-    cout << "Product removed successfully" << endl;
+    p->setIsActive(false);
 }
 
-
-//Display Function
-void ProductManager::displayAll() const
+void ProductManager::displayAll()
 {
-    cout << "\n--- All Products ---\n";
-    bool check = false;
-    for (int i = 0; i < count; i++)
-        if (products[i] != nullptr && products[i]->getIsActive())
-        {
-            products[i]->display();
-            check = true;
-        }
-    if (!check)
-        cout << "No products available!" << endl;
-}
-
-
-//•	Search product by name or ID
-void ProductManager::searchByName(string query) const
-{
-    cout << "\n--- Search Results ---\n";
-    bool found = false;
-    for (int i = 0; i < count; i++)
-    {
-        if (products[i] != nullptr && products[i]->getIsActive() && toLower(products[i]->getName()).find(toLower(query)) != string::npos)
-        {
-            products[i]->display();
-            found = true;
+    for each (Product ^ p in products) {
+        if (p->getIsActive()) {
+            p->display();
         }
     }
-    if (!found)
-        cout << "No products found" << endl;
 }
-Product* ProductManager::searchByID(int id)
+
+void ProductManager::searchByName(String^ query)
 {
-    for (int i = 0; i < count; i++) //handle the display in main() because it's causing errors here
-    {
-        if (products[i]->getID() == id && products[i]->getIsActive())
-        {
-            return products[i];    //return immediately when found
+    String^ q = toLower(query);
+    for each (Product ^ p in products) {
+        if (p->getIsActive() && toLower(p->getName())->Contains(q)) {
+            p->display();
         }
     }
-    return nullptr;                //only reaches here if not found
 }
 
+Product^ ProductManager::searchByID(int id)
+{
+    for each (Product ^ p in products) {
+        if (p->getID() == id && p->getIsActive()) {
+            return p;
+        }
+    }
+    return nullptr;
+}
 
-//•	Auto stock update after every sale(decrease by quantity sold)
 void ProductManager::decreaseStock(int id, int quantity)
 {
-    Product* p = searchByID(id);
-    if (p == nullptr)
-    {
-        cout << "ERROR: Product not found!" << endl;
-        return;
-    }
-    if (p->getStock() < quantity)
-    {
-        cout << "Insufficient stock!" << endl;
+    Product^ p = searchByID(id);
+    if (p == nullptr) return;
+    if (p->getStock() < quantity) {
+        MessageBox::Show("Insufficient stock");
         return;
     }
     p->setStock(p->getStock() - quantity);
-
-    if (p->isLowStock())
-        cout << "WARNING: Low stock on " << p->getName() << "!" << endl;
 }
 
-//•	Manual stock update by admin
 void ProductManager::increaseStock(int id, int quantity)
 {
-    Product* p = searchByID(id);
-    if (p == nullptr)
-    {
-        cout << "ERROR: Product not found!" << endl;
-        return;
-    }
+    Product^ p = searchByID(id);
+    if (p == nullptr) return;
     p->setStock(p->getStock() + quantity);
-    cout << "Stock updated successfully!" << endl;
 }
 
-//•	Low stock alert — warning when stock falls below 5
-void ProductManager::checkLowStock() const
+void ProductManager::checkLowStock()
 {
-    cout << "\n--- Low Stock Alert ---\n";
-    for (int i = 0; i < count; i++)
-    {
-        if (products[i]->getIsActive() && products[i]->isLowStock())
-            cout << "LOW: " << products[i]->getName() << " | Stock: " << products[i]->getStock() << endl;
+    for each (Product ^ p in products) {
+        if (p->getIsActive() && p->isLowStock()) {
+            MessageBox::Show("LOW: " + p->getName() + " | Stock: " + p->getStock());
+        }
     }
 }
 
-
-string ProductManager::toLower(string str) const //to deal with case sensitivity
+String^ ProductManager::toLower(String^ str)
 {
-    for (int i = 0; i < str.length(); i++)
-        str[i] = tolower(str[i]);
-    return str;
+    return str->ToLower();
 }
 
 
+//-------------------- DB Methods --------------------
 
-/*DBMS integrated, Temporary File Handling should be removed
-void ProductManager::saveToFile() const
+void ProductManager::loadFromDB()
 {
-    ofstream f("products.txt");
+    products->Clear();
 
-    f << nextID << "\n";      // save nextID*******************************************************
-    f << count << "\n";                // save count 
+    DataTable^ result = SBS::Database::ExecuteQuery(
+        "SELECT ProductID, Name, Category, Price, Stock, IsActive FROM Products WHERE IsActive = 1 ORDER BY ProductID");
 
-    for (int i = 0; i < count; i++)
-        f << products[i]->getID() << ","
-        << products[i]->getName() << ","
-        << products[i]->getCategory() << ","
-        << products[i]->getPrice() << ","
-        << products[i]->getStock() << ","
-        << products[i]->getIsActive() << "\n";
-    f.close();
+    if (result == nullptr) return;
+
+    for each (DataRow ^ row in result->Rows) {
+        int id = Convert::ToInt32(row["ProductID"]);
+        String^ n = row["Name"]->ToString();
+        String^ c = row["Category"]->ToString();
+        double p = Convert::ToDouble(row["Price"]);
+        int s = Convert::ToInt32(row["Stock"]);
+        bool active = Convert::ToBoolean(row["IsActive"]);
+
+        Product^ prod = gcnew Product(id, n, c, p, s);
+        prod->setIsActive(active);
+        products->Add(prod);
+    }
 }
 
-void ProductManager::loadFromFile() {
-
-    ifstream f("products.txt");
-    if (!f.is_open()) return;
-
-    int total = 0;
-    f >> nextID;               // read nextID first************************************
-    f >> total;
-    if (total <= 0) {   // if reading fails or file is empty
-        f.close();
-        return;                           // stop — nothing to load
-    }
-    f.ignore();
-
-
-
-    for (int i = 0; i < total; i++) {
-        int id, stock, active;
-        string name, category;
-        double price;
-
-        if (!(f >> id)) break;    // stop if reading fails mid-file
-
-        f >> id;       f.ignore();
-        getline(f, name, ',');
-        getline(f, category, ',');
-        f >> price;    f.ignore();
-        f >> stock;    f.ignore();
-        f >> active;
-
-        if (count == capacity)
-            resize();                              // grow array if full
-
-        products[count] = new Product(id, name, category, price, stock);
-        products[count]->setIsActive(active);
-        count++;
-
-
-    }
-    f.close();
+void ProductManager::addToDB(String^ name, String^ category, double price, int stock)
+{
+    if (price <= 0 || stock < 0) return;
+    SBS::Database::ExecuteNonQuery(
+        "INSERT INTO Products (Name, Category, Price, Stock, IsActive) VALUES (@n, @c, @p, @s, 1)",
+        gcnew SqlParameter("@n", name),
+        gcnew SqlParameter("@c", category),
+        gcnew SqlParameter("@p", price),
+        gcnew SqlParameter("@s", stock));
+    loadFromDB();
 }
-*/
 
+void ProductManager::updateInDB(int id, String^ name, String^ category, double price)
+{
+    if (price <= 0) return;
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Products SET Name = @n, Category = @c, Price = @p WHERE ProductID = @id",
+        gcnew SqlParameter("@n", name),
+        gcnew SqlParameter("@c", category),
+        gcnew SqlParameter("@p", price),
+        gcnew SqlParameter("@id", id));
+    loadFromDB();
+}
 
-/*
-products[i].display();   // wrong — products[i] is a pointer, not an object
-products[i]->display();  // correct — -> dereferences the pointer then calls method
-// these two are identical:
-products[i]->display();
-(*products[i]).display();
-*/
+void ProductManager::deleteFromDB(int id)
+{
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Products SET IsActive = 0 WHERE ProductID = @id",
+        gcnew SqlParameter("@id", id));
+    loadFromDB();
+}
+
+void ProductManager::decreaseStockInDB(int id, int qty)
+{
+    if (qty <= 0) return;
+    Object^ stockObj = SBS::Database::ExecuteScalar(
+        "SELECT Stock FROM Products WHERE ProductID = @id",
+        gcnew SqlParameter("@id", id));
+    if (stockObj == nullptr) return;
+    int currentStock = Convert::ToInt32(stockObj);
+    if (currentStock < qty) return;
+
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Products SET Stock = Stock - @q WHERE ProductID = @id",
+        gcnew SqlParameter("@q", qty),
+        gcnew SqlParameter("@id", id));
+    loadFromDB();
+}
+
+void ProductManager::increaseStockInDB(int id, int qty)
+{
+    if (qty <= 0) return;
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Products SET Stock = Stock + @q WHERE ProductID = @id",
+        gcnew SqlParameter("@q", qty),
+        gcnew SqlParameter("@id", id));
+    loadFromDB();
+}
+
+void ProductManager::checkLowStockFromDB() {
+    // No-op; UI handles via DB query directly
+}
+
+void ProductManager::searchByNameFromDB(String^ query) {
+    // No-op; UI handles via DB query directly
+}
+
+void ProductManager::searchByIDFromDB(int id) {
+    // No-op; UI handles via DB query directly
+}
+
+void ProductManager::displayAllFromDB()
+{
+    loadFromDB();
+}

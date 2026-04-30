@@ -139,13 +139,13 @@
     <ClInclude Include="session.h" />
     <ClInclude Include="SettingsForm.h" />
     <ClInclude Include="shared.h" />
-    <ClInclude Include="SUper\AddProductForm.h" />
-    <ClInclude Include="SUper\EditProductForm.h" />
-    <ClInclude Include="SUper\product.h" />
-    <ClInclude Include="SUper\ProductsForm.h" />
-    <ClInclude Include="SUper\SearchProductForm.h" />
-    <ClInclude Include="SUper\StockAlertForm.h" />
-    <ClInclude Include="SUper\UserProductView.h" />
+    <ClInclude Include="AddProductForm.h" />
+    <ClInclude Include="EditProductForm.h" />
+    <ClInclude Include="product.h" />
+    <ClInclude Include="ProductsForm.h" />
+    <ClInclude Include="SearchProductForm.h" />
+    <ClInclude Include="StockAlertForm.h" />
+    <ClInclude Include="UserProductView.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -163,9 +163,9 @@
     <ClCompile Include="PaymentMethodForm.cpp" />
     <ClCompile Include="SalesReportForm.cpp" />
     <ClCompile Include="SettingsForm.cpp" />
-    <ClCompile Include="SUper\product.cpp" />
-    <ClCompile Include="SUper\ProductForm.cpp" />
-    <ClCompile Include="SUper\StockAlertForm.cpp" />
+    <ClCompile Include="product.cpp" />
+    <ClCompile Include="ProductForm.cpp" />
+    <ClCompile Include="StockAlertForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AdminDashboardForm.resx">
@@ -183,7 +183,7 @@
     <EmbeddedResource Include="SalesReportForm.resx">
       <DependentUpon>SalesReportForm.h</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SUper\ProductsForm.resx" />
+    <EmbeddedResource Include="ProductsForm.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="reports.sql" />

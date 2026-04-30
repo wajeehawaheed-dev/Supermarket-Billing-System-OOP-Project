@@ -12,7 +12,7 @@ namespace SUper {
 
     public ref class AddProductForm : public Form {
     private:
-        ProductManager* pm;
+        ProductManager^ pm;
         TextBox^ txtName;
         TextBox^ txtCategory;
         TextBox^ txtPrice;
@@ -22,10 +22,10 @@ namespace SUper {
 
     public:
         AddProductForm() {
-            pm = new ProductManager();
+            pm = gcnew ProductManager();
             InitializeComponent();
         }
-        ~AddProductForm() { delete pm; }
+        ~AddProductForm() { }
 
     private:
         void InitializeComponent() {
@@ -111,9 +111,7 @@ namespace SUper {
             if (!Int32::TryParse(txtStock->Text, stock) || stock < 0) {
                 MessageBox::Show("Enter a valid stock quantity."); return;
             }
-            string sName = msclr::interop::marshal_as<string>(txtName->Text->Trim());
-            string sCat = msclr::interop::marshal_as<string>(txtCategory->Text->Trim());
-            pm->addToDB(sName, sCat, price, stock);
+            pm->addToDB(txtName->Text->Trim(), txtCategory->Text->Trim(), price, stock);
             MessageBox::Show("Product added successfully!", "Success",
                 MessageBoxButtons::OK, MessageBoxIcon::Information);
             this->Close();

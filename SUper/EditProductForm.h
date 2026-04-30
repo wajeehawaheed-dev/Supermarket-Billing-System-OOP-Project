@@ -14,7 +14,7 @@ namespace SUper {
     public ref class EditProductForm : public Form {
     private:
         int             productID;
-        ProductManager* pm;
+        ProductManager^ pm;
         TextBox^ txtName;
         TextBox^ txtCategory;
         TextBox^ txtPrice;
@@ -26,11 +26,11 @@ namespace SUper {
     public:
         EditProductForm(int id) {
             productID = id;
-            pm = new ProductManager();
+            pm = gcnew ProductManager();
             InitializeComponent();
             loadData();
         }
-        ~EditProductForm() { delete pm; }
+        ~EditProductForm() { }
 
     private:
         void InitializeComponent() {
@@ -138,9 +138,7 @@ namespace SUper {
             if (!Double::TryParse(txtPrice->Text, price) || price <= 0) {
                 MessageBox::Show("Enter a valid price."); return;
             }
-            string sName = msclr::interop::marshal_as<string>(txtName->Text->Trim());
-            string sCat = msclr::interop::marshal_as<string>(txtCategory->Text->Trim());
-            pm->updateInDB(productID, sName, sCat, price);
+            pm->updateInDB(productID, txtName->Text->Trim(), txtCategory->Text->Trim(), price);
             MessageBox::Show("Product updated!", "Success",
                 MessageBoxButtons::OK, MessageBoxIcon::Information);
             this->Close();

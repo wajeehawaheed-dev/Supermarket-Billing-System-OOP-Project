@@ -42,25 +42,25 @@
     <ClInclude Include="SettingsForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\AddProductForm.h">
+    <ClInclude Include="AddProductForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\EditProductForm.h">
+    <ClInclude Include="EditProductForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\product.h">
+    <ClInclude Include="product.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\ProductsForm.h">
+    <ClInclude Include="ProductsForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\SearchProductForm.h">
+    <ClInclude Include="SearchProductForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\StockAlertForm.h">
+    <ClInclude Include="StockAlertForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SUper\UserProductView.h">
+    <ClInclude Include="UserProductView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="database.h">
@@ -89,13 +89,13 @@
     <ClCompile Include="SettingsForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SUper\product.cpp">
+    <ClCompile Include="product.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="SUper\ProductForm.cpp">
+    <ClCompile Include="ProductForm.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="SUper\StockAlertForm.cpp">
+    <ClCompile Include="StockAlertForm.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="constants.cpp">
@@ -109,7 +109,7 @@
     <None Include="reports.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SUper\ProductsForm.resx">
+    <EmbeddedResource Include="ProductsForm.resx">
       <Filter>Header Files</Filter>
     </EmbeddedResource>
   </ItemGroup>
