@@ -30,6 +30,42 @@
     <ClInclude Include="shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AdminDashboardForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BestSellersForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PaymentMethodForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SalesReportForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\AddProductForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\EditProductForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\product.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\ProductsForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\SearchProductForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\StockAlertForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SUper\UserProductView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoginForm.cpp">
@@ -38,13 +74,43 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AdminDashboardForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BestSellersForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PaymentMethodForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SalesReportForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SUper\product.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SUper\ProductForm.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SUper\StockAlertForm.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="schema.sql">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="test.sql">
+    <None Include="reports.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SUper\ProductsForm.resx">
       <Filter>Header Files</Filter>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
