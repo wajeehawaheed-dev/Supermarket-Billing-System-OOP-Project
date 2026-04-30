@@ -5,6 +5,7 @@
 #include "BestSellersForm.h"
 #include "PaymentMethodForm.h"
 #include "SettingsForm.h"
+#include "ProductsForm.h"
 namespace SUper {
 
 	using namespace System;
@@ -54,7 +55,8 @@ namespace SUper {
 	private: System::Windows::Forms::Label^ lblAllTimeCaption;
 	private: System::Windows::Forms::Label^ lblAllTimeValue;
 	private: System::Windows::Forms::Button^ btnUsers;
-	private: System::Windows::Forms::Button^ btnInventory;
+	private: System::Windows::Forms::Button^ btnProducts;
+
 
 
 	private:
@@ -80,7 +82,7 @@ namespace SUper {
 			this->lblAllTimeValue = (gcnew System::Windows::Forms::Label());
 			this->btnRefresh = (gcnew System::Windows::Forms::Button());
 			this->btnUsers = (gcnew System::Windows::Forms::Button());
-			this->btnInventory = (gcnew System::Windows::Forms::Button());
+			this->btnProducts = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// lblHead
@@ -261,22 +263,23 @@ namespace SUper {
 			this->btnUsers->Text = L"Manage Users";
 			this->btnUsers->UseVisualStyleBackColor = true;
 			// 
-			// btnInventory
+			// btnProducts
 			// 
-			this->btnInventory->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->btnInventory->Location = System::Drawing::Point(240, 175);
-			this->btnInventory->Name = L"btnInventory";
-			this->btnInventory->Size = System::Drawing::Size(250, 40);
-			this->btnInventory->TabIndex = 20;
-			this->btnInventory->Text = L"Inventory";
-			this->btnInventory->UseVisualStyleBackColor = true;
+			this->btnProducts->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->btnProducts->Location = System::Drawing::Point(240, 175);
+			this->btnProducts->Name = L"btnProducts";
+			this->btnProducts->Size = System::Drawing::Size(250, 40);
+			this->btnProducts->TabIndex = 20;
+			this->btnProducts->Text = L"Products";
+			this->btnProducts->UseVisualStyleBackColor = true;
+			this->btnProducts->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnProducts_Click);
 			// 
 			// AdminDashboardForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(750, 460);
-			this->Controls->Add(this->btnInventory);
+			this->Controls->Add(this->btnProducts);
 			this->Controls->Add(this->btnUsers);
 			this->Controls->Add(this->btnLogout);
 			this->Controls->Add(this->btnBestSellers);
@@ -374,5 +377,10 @@ namespace SUper {
 		   private: System::Void btnRefresh_Click(System::Object^ sender, System::EventArgs^ e) {
 			   LoadDashboardTiles();
 		   }
-	};
+	private: System::Void btnProducts_Click(System::Object^ sender, System::EventArgs^ e) {
+		ProductsForm^ form = gcnew ProductsForm();
+		form->ShowDialog();
+		LoadDashboardTiles();
+	}
+};
 }
