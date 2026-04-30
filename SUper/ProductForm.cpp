@@ -2,7 +2,7 @@
 #include "AddProductForm.h"
 #include "EditProductForm.h"
 #include "SearchProductForm.h"
-
+#include "database.h"
 namespace SUper {
 
     void ProductsForm::btnAdd_Click(Object^ sender, EventArgs^ e) {

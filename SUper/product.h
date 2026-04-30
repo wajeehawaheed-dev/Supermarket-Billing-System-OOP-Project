@@ -3,6 +3,7 @@
 //MEMBER 2
 //Declarations of class Product & ProductManager
 #include <string>
+#include "database.h"
 using namespace std;
 
 //Shared CLASS 01
