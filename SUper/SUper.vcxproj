@@ -157,7 +157,7 @@
   <ItemGroup>
     <ClCompile Include="AdminDashboardForm.cpp" />
     <ClCompile Include="BestSellersForm.cpp" />
-    <ClCompile Include="files\constants.cpp" />
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PaymentMethodForm.cpp" />

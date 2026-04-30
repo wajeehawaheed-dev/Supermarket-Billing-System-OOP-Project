@@ -80,9 +80,6 @@
     <ClCompile Include="BestSellersForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="files\constants.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PaymentMethodForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="SUper\StockAlertForm.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="constants.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
