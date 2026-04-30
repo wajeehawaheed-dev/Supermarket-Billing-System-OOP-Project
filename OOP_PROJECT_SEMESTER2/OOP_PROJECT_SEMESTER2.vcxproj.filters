@@ -44,9 +44,6 @@
     <ClInclude Include="ProductsForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AddEditProductForm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StockAlertForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -57,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Searchproductform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Userproductview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

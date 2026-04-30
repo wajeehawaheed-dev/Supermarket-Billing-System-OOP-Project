@@ -135,9 +135,6 @@
     <ClCompile Include="testing.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddEditProductForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
     <ClInclude Include="Addproductform.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="Editproductform.h" />
@@ -150,6 +147,7 @@
     <ClInclude Include="StockAlertForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Userproductview.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -159,9 +157,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddEditProductForm.resx">
-      <DependentUpon>AddEditProductForm.h</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ProductsForm.resx">
       <DependentUpon>ProductsForm.h</DependentUpon>
     </EmbeddedResource>
