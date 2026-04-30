@@ -5,9 +5,9 @@
 #include <string>
 #include <iomanip>
 #include <ctime>
-#include <vector>
 #include "Cart.h"
 using namespace std;
+
 class Payment;
 
 class Receipt {
@@ -16,7 +16,8 @@ private:
     int billNo;
     string date;
     string cashierName;
-    vector<CartItem> items;
+    CartItem items[100];
+    int itemCount;
     double amountPaid;
     double subtotal;
     double discount;

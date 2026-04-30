@@ -2,7 +2,6 @@
 #include <string>
 #include <iomanip>
 #include <ctime>
-#include <vector>
 #include "Receipt.h"
 #include "Cart.h"
 #include "Payment.h"
@@ -28,13 +27,18 @@ Receipt::Receipt(int billNo, string cashierName, string storeNo,
     this->paymentMethod = method;
     this->cashierName = cashierName.empty() ? "Unknown" : cashierName;
     this->storeNo = storeNo.empty() ? "N/A" : storeNo;
-    this->items = cart->getItems();
+
+    itemCount = cart->getItemCount();
+    CartItem* cartItems = cart->getItems();
+    for (int i = 0; i < itemCount; i++) {
+        items[i] = cartItems[i];
+    }
+
     subtotal = cart->getSubTotal();
     discount = cart->calculateDiscount();
     tax = cart->calculateTax();
     grandTotal = cart->getGrandTotal();
     amountPaid = payment->getAmountPaid();
-    if (payment->getstatus() != "Approved")
     change = (amountPaid < grandTotal) ? 0 : amountPaid - grandTotal;
 
     time_t t = time(0);
@@ -77,18 +81,18 @@ void Receipt::generateReceipt(Payment* payment) {
         << setw(10) << "Total" << endl;
     cout << "----------------------------------------\n";
 
-    if (items.empty()) {
+    if (itemCount == 0) {
         cout << "No items purchased!\n";
     }
     else {
-        for (const auto& item : items) {
-            string name = item.name;
+        for (int i = 0; i < itemCount; i++) {
+            string name = items[i].name;
             if (name.length() > 18)
                 name = name.substr(0, 18);
             cout << left << setw(20) << name
-                << setw(8) << item.quantity
-                << setw(10) << fixed << setprecision(2) << item.price
-                << setw(10) << item.itemTotal << endl;
+                << setw(8) << items[i].quantity
+                << setw(10) << fixed << setprecision(2) << items[i].price
+                << setw(10) << items[i].itemTotal << endl;
         }
     }
 
