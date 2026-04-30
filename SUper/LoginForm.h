@@ -51,7 +51,7 @@ namespace SUper {
 
 
 
-	private: System::Windows::Forms::Button^ btnSignup;
+
 
 	private: System::Windows::Forms::Button^ btnLogin;
 
@@ -77,7 +77,6 @@ namespace SUper {
 			this->txtUsername = (gcnew System::Windows::Forms::TextBox());
 			this->lblPassword = (gcnew System::Windows::Forms::Label());
 			this->txtPassword = (gcnew System::Windows::Forms::TextBox());
-			this->btnSignup = (gcnew System::Windows::Forms::Button());
 			this->btnLogin = (gcnew System::Windows::Forms::Button());
 			this->lblerror = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
@@ -141,24 +140,13 @@ namespace SUper {
 			this->txtPassword->Size = System::Drawing::Size(132, 20);
 			this->txtPassword->TabIndex = 5;
 			// 
-			// btnSignup
-			// 
-			this->btnSignup->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->btnSignup->Location = System::Drawing::Point(281, 208);
-			this->btnSignup->Name = L"btnSignup";
-			this->btnSignup->Size = System::Drawing::Size(102, 32);
-			this->btnSignup->TabIndex = 6;
-			this->btnSignup->Text = L"Sign Up";
-			this->btnSignup->UseVisualStyleBackColor = true;
-			// 
 			// btnLogin
 			// 
 			this->btnLogin->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->btnLogin->Location = System::Drawing::Point(146, 208);
+			this->btnLogin->Location = System::Drawing::Point(221, 209);
 			this->btnLogin->Name = L"btnLogin";
-			this->btnLogin->Size = System::Drawing::Size(102, 32);
+			this->btnLogin->Size = System::Drawing::Size(131, 39);
 			this->btnLogin->TabIndex = 7;
 			this->btnLogin->Text = L"Login";
 			this->btnLogin->UseVisualStyleBackColor = true;
@@ -181,7 +169,6 @@ namespace SUper {
 			this->ClientSize = System::Drawing::Size(538, 343);
 			this->Controls->Add(this->lblerror);
 			this->Controls->Add(this->btnLogin);
-			this->Controls->Add(this->btnSignup);
 			this->Controls->Add(this->txtPassword);
 			this->Controls->Add(this->lblPassword);
 			this->Controls->Add(this->txtUsername);
