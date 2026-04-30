@@ -1,9 +1,19 @@
 //Testing main for member 2 only
 #include "database.h"
 #include "product.h"
+
+#include "ProductsForm.h"
+
 #include <iostream>
 using namespace std;
 using namespace System;
+using namespace System::Windows::Forms;   // add this
+
+
+
+
+
+
 
 int main()
 {
@@ -19,7 +29,11 @@ int main()
     return 0;*/
 
     //-----------------------------------------------------------------------------------------------
-
+    //Winforms
+    Application::EnableVisualStyles();
+    Application::SetCompatibleTextRenderingDefault(false);
+    Application::Run(gcnew OOP_PROJECT_SEMESTER2::ProductsForm());
+    return 0;
 
     ProductManager pm;
     //pm.loadFromDB();   // this instead of file handling functions, remove this line — DB functions query directly, no need to load into memory

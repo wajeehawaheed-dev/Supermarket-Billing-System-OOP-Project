@@ -128,18 +128,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="InventoryForm.cpp" />
+    <ClCompile Include="ProductForm.cpp" />
     <ClCompile Include="product.cpp" />
     <ClCompile Include="sql.cpp" />
-    <ClCompile Include="TestingAndSql.cpp" />
+    <ClCompile Include="StockAlertForm.cpp" />
+    <ClCompile Include="testing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddEditProductForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Addproductform.h" />
     <ClInclude Include="database.h" />
-    <ClInclude Include="InventoryForm.h">
+    <ClInclude Include="Editproductform.h" />
+    <ClInclude Include="ProductsForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="product.h" />
+    <ClInclude Include="Searchproductform.h" />
     <ClInclude Include="shared.h" />
+    <ClInclude Include="StockAlertForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -149,8 +159,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="InventoryForm.resx">
-      <DependentUpon>InventoryForm.h</DependentUpon>
+    <EmbeddedResource Include="AddEditProductForm.resx">
+      <DependentUpon>AddEditProductForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductsForm.resx">
+      <DependentUpon>ProductsForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
