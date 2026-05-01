@@ -122,10 +122,10 @@ namespace SUper {
 			// dataGridView1
 			// 
 			this->dataGridView1->AllowUserToAddRows = false;
-			this->dataGridView1->ReadOnly = true;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dataGridView1->Location = System::Drawing::Point(12, 107);
 			this->dataGridView1->Name = L"dataGridView1";
+			this->dataGridView1->ReadOnly = true;
 			this->dataGridView1->Size = System::Drawing::Size(700, 320);
 			this->dataGridView1->TabIndex = 6;
 			// 
@@ -136,7 +136,7 @@ namespace SUper {
 				static_cast<System::Byte>(0)));
 			this->lblTotalRevenue->Location = System::Drawing::Point(91, 491);
 			this->lblTotalRevenue->Name = L"lblTotalRevenue";
-			this->lblTotalRevenue->Size = System::Drawing::Size(175, 20);
+			this->lblTotalRevenue->Size = System::Drawing::Size(197, 20);
 			this->lblTotalRevenue->TabIndex = 7;
 			this->lblTotalRevenue->Text = L"Total Revenue: Rs 0.00";
 			// 
@@ -171,9 +171,11 @@ namespace SUper {
 			this->Name = L"SalesReportForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Sales Report - ValueMart";
+			this->Load += gcnew System::EventHandler(this, &SalesReportForm::SalesReportForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 		}
 #pragma endregion
 
@@ -225,5 +227,7 @@ namespace SUper {
 			   }
 			   lblTotalRevenue->Text = "Total Revenue: Rs " + total.ToString("N2");
 		   }
-	};
+	private: System::Void SalesReportForm_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }

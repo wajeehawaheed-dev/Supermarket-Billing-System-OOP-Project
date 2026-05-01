@@ -125,6 +125,9 @@
     <ClInclude Include="BestSellersForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="BillHistoryForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="BillingForm.h" />
     <ClInclude Include="CartForm.h" />
     <ClInclude Include="ChangePasswordForm.h" />
@@ -170,6 +173,7 @@
   <ItemGroup>
     <ClCompile Include="AdminDashboardForm.cpp" />
     <ClCompile Include="BestSellersForm.cpp" />
+    <ClCompile Include="BillHistoryForm.cpp" />
     <ClCompile Include="BillingForm.cpp" />
     <ClCompile Include="CartForm.cpp" />
     <ClCompile Include="ChangePasswordForm.cpp" />
@@ -194,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BestSellersForm.resx">
       <DependentUpon>BestSellersForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillHistoryForm.resx">
+      <DependentUpon>BillHistoryForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BillingForm.resx" />
     <EmbeddedResource Include="CartForm.resx" />

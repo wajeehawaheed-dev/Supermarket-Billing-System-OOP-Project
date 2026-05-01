@@ -5,6 +5,7 @@ using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 using namespace System::Data::SqlClient;
+using namespace System::Text;
 
 ReceiptForm::ReceiptForm(int billNo) {
     this->billNo = billNo;
@@ -206,25 +207,71 @@ void ReceiptForm::InitializeComponent() {
 }
 
 void ReceiptForm::LoadReceiptData() {
-    System::Data::DataTable^ dt = SBS::Database::ExecuteQuery(
-        "SELECT * FROM Payments WHERE BillNo = @b",
+    // 1. Get Bill + Cashier info
+    System::Data::DataTable^ billDt = SBS::Database::ExecuteQuery(
+        "SELECT b.BillNo, b.Date, b.Subtotal, b.Discount, b.Tax, b.Total, u.Username "
+        "FROM Bills b LEFT JOIN Users u ON b.UserID = u.UserID "
+        "WHERE b.BillNo = @b",
         gcnew SqlParameter("@b", billNo));
 
-    if (dt->Rows->Count > 0) {
-        System::Data::DataRow^ row = dt->Rows[0];
-        lblBillNo->Text = "Bill No: " + row["BillNo"]->ToString();
-        lblDate->Text = "Date: " + row["PayDate"]->ToString();
-        lblPayMethod->Text = "Payment Method:        " + row["Method"]->ToString();
-        lblAmountPaid->Text = "Amount Paid:           Rs " + row["AmountPaid"]->ToString();
-        lblChange->Text = "Change:                Rs " + row["ChangeAmount"]->ToString();
-        lblGrandTotal->Text = "GRAND TOTAL:           Rs " + row["AmountPaid"]->ToString();
+    if (billDt == nullptr || billDt->Rows->Count == 0) {
+        MessageBox::Show("No bill found for Bill No: " + billNo);
+        return;
+    }
 
-        if (row["Method"]->ToString() == "Card") {
-            lblChange->Visible = false;
+    System::Data::DataRow^ billRow = billDt->Rows[0];
+    lblBillNo->Text = "Bill No: " + billRow["BillNo"]->ToString();
+    lblDate->Text = "Date: " + billRow["Date"]->ToString();
+    lblCashier->Text = "Cashier: " + billRow["Username"]->ToString();
+    lblSubtotal->Text = "Subtotal:              Rs " + Convert::ToDouble(billRow["Subtotal"]).ToString("F2");
+    lblDiscount->Text = "Discount:              Rs " + Convert::ToDouble(billRow["Discount"]).ToString("F2");
+    lblTax->Text = "Tax:                   Rs " + Convert::ToDouble(billRow["Tax"]).ToString("F2");
+    lblGrandTotal->Text = "GRAND TOTAL:           Rs " + Convert::ToDouble(billRow["Total"]).ToString("F2");
+
+    // 2. Get items list
+    System::Data::DataTable^ itemsDt = SBS::Database::ExecuteQuery(
+        "SELECT p.Name, bi.Quantity, bi.Price, (bi.Quantity * bi.Price) AS LineTotal "
+        "FROM BillItems bi LEFT JOIN Products p ON bi.ProductID = p.ProductID "
+        "WHERE bi.BillNo = @b",
+        gcnew SqlParameter("@b", billNo));
+
+    System::Text::StringBuilder^ sb = gcnew System::Text::StringBuilder();
+    sb->AppendLine("Item                 Qty   Price    Total");
+    sb->AppendLine("----------------------------------------");
+
+    if (itemsDt != nullptr) {
+        for each (System::Data::DataRow ^ row in itemsDt->Rows) {
+            String^ name = row["Name"]->ToString();
+            // Truncate or pad name to 20 chars
+            if (name->Length > 20) name = name->Substring(0, 20);
+            else name = name->PadRight(20);
+
+            String^ qty = Convert::ToInt32(row["Quantity"]).ToString()->PadLeft(4);
+            String^ price = Convert::ToDouble(row["Price"]).ToString("F2")->PadLeft(8);
+            String^ total = Convert::ToDouble(row["LineTotal"]).ToString("F2")->PadLeft(8);
+
+            sb->AppendLine(name + " " + qty + " " + price + " " + total);
         }
     }
-    else {
-        MessageBox::Show("No receipt found for Bill No: " + billNo);
+    lblItems->Text = sb->ToString();
+
+    // 3. Get Payment info
+    System::Data::DataTable^ payDt = SBS::Database::ExecuteQuery(
+        "SELECT Method, AmountPaid, ChangeAmount FROM Payments WHERE BillNo = @b",
+        gcnew SqlParameter("@b", billNo));
+
+    if (payDt != nullptr && payDt->Rows->Count > 0) {
+        System::Data::DataRow^ payRow = payDt->Rows[0];
+        String^ method = payRow["Method"]->ToString();
+        lblPayMethod->Text = "Payment Method:        " + method;
+        lblAmountPaid->Text = "Amount Paid:           Rs " + Convert::ToDouble(payRow["AmountPaid"]).ToString("F2");
+
+        if (method == "Card") {
+            lblChange->Visible = false;
+        }
+        else {
+            lblChange->Text = "Change:                Rs " + Convert::ToDouble(payRow["ChangeAmount"]).ToString("F2");
+        }
     }
 }
 
