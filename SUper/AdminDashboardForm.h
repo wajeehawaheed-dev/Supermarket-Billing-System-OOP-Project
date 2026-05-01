@@ -6,6 +6,8 @@
 #include "PaymentMethodForm.h"
 #include "SettingsForm.h"
 #include "ProductsForm.h"
+#include "UserManageForm.h"
+#include "UserManageForm.h"
 namespace SUper {
 
 	using namespace System;
@@ -262,6 +264,7 @@ namespace SUper {
 			this->btnUsers->TabIndex = 19;
 			this->btnUsers->Text = L"Manage Users";
 			this->btnUsers->UseVisualStyleBackColor = true;
+			this->btnUsers->Click += gcnew System::EventHandler(this, &AdminDashboardForm::btnUsers_Click);
 			// 
 			// btnProducts
 			// 
@@ -382,5 +385,16 @@ namespace SUper {
 		form->ShowDialog();
 		LoadDashboardTiles();
 	}
+private: System::Void btnUsers_Click(System::Object^ sender, System::EventArgs^ e) {
+	User^ adminUser = gcnew User(
+		SBS::Session::GetUserID(),
+		SBS::Session::GetUsername(),
+		"",  // password not needed for the form
+		SBS::Session::GetRole(),
+		true);
+	UserManagementForm^ form = gcnew UserManagementForm(adminUser);
+	form->ShowDialog();
+	delete adminUser;
+}
 };
 }

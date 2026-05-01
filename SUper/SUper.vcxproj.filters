@@ -81,6 +81,18 @@
     <ClInclude Include="SearchForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChangePasswordForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManageForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Users.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoginForm.cpp">
@@ -126,6 +138,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CartForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangePasswordForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManageForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Users.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

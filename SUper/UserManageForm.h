@@ -1,8 +1,9 @@
 #pragma once
 #include "Users.h"
 #include "UserDB.h"
+#include "ChangePasswordForm.h"
 
-namespace UserManagement
+namespace SUper
 {
 
     using namespace System;
@@ -70,6 +71,7 @@ namespace UserManagement
         }
 
         void btnCreateUser_Click(Object^ sender , EventArgs^ e);
+        void btnChangePassword_Click(Object^ sender, EventArgs^ e);
         void btnDeleteUser_Click(Object^ sender , EventArgs^ e);
         void btnBlockUser_Click(Object^ sender , EventArgs^ e);
         void btnUnblockUser_Click(Object^ sender , EventArgs^ e);

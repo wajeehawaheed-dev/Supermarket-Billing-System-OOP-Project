@@ -1,6 +1,6 @@
 #include "UserManageForm.h"
 
-namespace UserManagement
+namespace SUper
 {
 
     CreateUserForm::CreateUserForm()
@@ -144,7 +144,7 @@ namespace UserManagement
     void UserManagementForm::InitializeComponent()
     {
         this->Text = "User Management";
-        this->Size = System::Drawing::Size(750 , 520);
+        this->Size = System::Drawing::Size(880 , 520);
         this->StartPosition = FormStartPosition::CenterScreen;
         this->BackColor = System::Drawing::Color::White;
 
@@ -156,7 +156,7 @@ namespace UserManagement
 
         dgvUsers = gcnew System::Windows::Forms::DataGridView();
         dgvUsers->Location = System::Drawing::Point(20 , 60);
-        dgvUsers->Size = System::Drawing::Size(700 , 340);
+        dgvUsers->Size = System::Drawing::Size(830 , 340);
         dgvUsers->ReadOnly = true;
         dgvUsers->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
         dgvUsers->MultiSelect = false;
@@ -203,11 +203,20 @@ namespace UserManagement
         btnRefresh = gcnew System::Windows::Forms::Button();
         btnRefresh->Text = "Refresh";
         btnRefresh->Size = System::Drawing::Size(130 , 38);
-        btnRefresh->Location = System::Drawing::Point(590 , 420);
+        btnRefresh->Location = System::Drawing::Point(720 , 420);
         btnRefresh->BackColor = System::Drawing::Color::FromArgb(80 , 80 , 80);
         btnRefresh->ForeColor = System::Drawing::Color::White;
         btnRefresh->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
         btnRefresh->Click += gcnew System::EventHandler(this , &UserManagementForm::btnRefresh_Click);
+
+        Button^ btnChangePassword = gcnew System::Windows::Forms::Button();
+        btnChangePassword->Text = "Change Password";
+        btnChangePassword->Size = System::Drawing::Size(140, 38);
+        btnChangePassword->Location = System::Drawing::Point(575, 420);
+        btnChangePassword->BackColor = System::Drawing::Color::FromArgb(120, 80, 200);
+        btnChangePassword->ForeColor = System::Drawing::Color::White;
+        btnChangePassword->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+        btnChangePassword->Click += gcnew System::EventHandler(this, &UserManagementForm::btnChangePassword_Click);
 
         this->Controls->Add(lblTitle);
         this->Controls->Add(dgvUsers);
@@ -216,6 +225,7 @@ namespace UserManagement
         this->Controls->Add(btnBlockUser);
         this->Controls->Add(btnUnblockUser);
         this->Controls->Add(btnRefresh);
+        this->Controls->Add(btnChangePassword);
     }
 
     void UserManagementForm::loadUsers()
@@ -291,6 +301,35 @@ namespace UserManagement
 
     void UserManagementForm::btnRefresh_Click(Object^ sender , EventArgs^ e)
     {
+        loadUsers();
+    }
+    void UserManagementForm::btnChangePassword_Click(Object^ sender, EventArgs^ e)
+    {
+        int id = getSelectedUserID();
+        if (id == -1) return;
+
+        // Find selected user object
+        List<User^>^ users = UserDB::getAllUsers();
+        User^ targetUser = nullptr;
+        for each (User ^ u in users) {
+            if (u->getUserID() == id) {
+                targetUser = u;
+                break;
+            }
+        }
+        if (targetUser == nullptr) return;
+
+        // If selected user is the logged-in admin: self-change (old password required)
+        // Otherwise: admin reset (no old password)
+        bool isSelf = (id == loggedInUser->getUserID());
+        ChangePasswordForm^ form;
+        if (isSelf) {
+            form = gcnew ChangePasswordForm(targetUser);
+        }
+        else {
+            form = gcnew ChangePasswordForm(targetUser, true);
+        }
+        form->ShowDialog();
         loadUsers();
     }
 }

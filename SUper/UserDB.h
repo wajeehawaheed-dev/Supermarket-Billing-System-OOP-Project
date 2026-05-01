@@ -1,5 +1,4 @@
 #pragma once
-#include "DatabaseConnection.h"
 #include "Users.h"
 
 using namespace System;
@@ -16,6 +15,7 @@ public:
     static bool deleteUser(int userID);
     static bool setUserActive(int userID , bool status);
     static bool changePassword(int userID , String^ oldPass , String^ newPass);
+    static bool adminResetPassword(int userID, String^ newPass);
     static List<User^>^ getAllUsers();
     static bool usernameExists(String^ username);
 };

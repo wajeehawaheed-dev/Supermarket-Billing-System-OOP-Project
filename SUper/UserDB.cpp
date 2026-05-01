@@ -1,198 +1,142 @@
 #include "UserDB.h"
+#include "database.h"
+
+using namespace System::Data;
+using namespace System::Data::SqlClient;
 
 void UserDB::defAdmin()
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ checkCmd = gcnew SqlCommand(
-            "SELECT COUNT(*) FROM Users WHERE Role = 'Admin'" , conn);
-        int count = ( int ) checkCmd->ExecuteScalar();
-        if ( count == 0 ) {
-            SqlCommand^ cmd = gcnew SqlCommand(
-                "INSERT INTO Users (Username, Password, Role, IsActive) "
-                "VALUES (@u, @p, @r, @a)" , conn);
-            cmd->Parameters->AddWithValue("@u" , "admin");
-            cmd->Parameters->AddWithValue("@p" , "admin123");
-            cmd->Parameters->AddWithValue("@r" , "Admin");
-            cmd->Parameters->AddWithValue("@a" , true);
-            cmd->ExecuteNonQuery();
-        }
+    // Idempotent: ensures admin exists. Schema seed already creates one,
+    // but this handles the case where seed wasn't run.
+    Object^ result = SBS::Database::ExecuteScalar(
+        "SELECT COUNT(*) FROM Users WHERE Role = 'Admin'");
+    int count = (result == nullptr) ? 0 : Convert::ToInt32(result);
+    if (count == 0) {
+        SBS::Database::ExecuteNonQuery(
+            "INSERT INTO Users (Username, Password, Role, IsActive) "
+            "VALUES (@u, @p, @r, @a)",
+            gcnew SqlParameter("@u", "admin"),
+            gcnew SqlParameter("@p", "admin123"),
+            gcnew SqlParameter("@r", "Admin"),
+            gcnew SqlParameter("@a", true));
     }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Seed error: " + ex->Message);
-    }
-    finally { conn->Close(); }
 }
 
-User^ UserDB::loginUser(String^ username , String^ password)
+User^ UserDB::loginUser(String^ username, String^ password)
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "SELECT UserID, Username, Password, Role, IsActive "
-            "FROM Users WHERE Username = @u AND Password = @p" , conn);
-        cmd->Parameters->AddWithValue("@u" , username);
-        cmd->Parameters->AddWithValue("@p" , password);
-        SqlDataReader^ reader = cmd->ExecuteReader();
-        if ( reader->Read() ) {
-            bool active = ( bool ) reader ["IsActive"];
-            if ( !active ) {
-                MessageBox::Show("This account has been blocked.");
-                return nullptr;
-            }
-            return gcnew User(
-                ( int ) reader ["UserID"] ,
-                reader ["Username"]->ToString() ,
-                reader ["Password"]->ToString() ,
-                reader ["Role"]->ToString() ,
-                active
-            );
-        }
+    // Note: LoginForm has its own login logic — this method is unused
+    // but kept for API compatibility with UserDB.h
+    DataTable^ result = SBS::Database::ExecuteQuery(
+        "SELECT UserID, Username, Password, Role, IsActive "
+        "FROM Users WHERE Username = @u AND Password = @p",
+        gcnew SqlParameter("@u", username),
+        gcnew SqlParameter("@p", password));
+
+    if (result == nullptr || result->Rows->Count == 0)
+        return nullptr;
+
+    DataRow^ row = result->Rows[0];
+    bool active = Convert::ToBoolean(row["IsActive"]);
+    if (!active) {
+        MessageBox::Show("This account has been blocked.");
         return nullptr;
     }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Login error: " + ex->Message);
-        return nullptr;
-    }
-    finally { conn->Close(); }
+    return gcnew User(
+        Convert::ToInt32(row["UserID"]),
+        row["Username"]->ToString(),
+        row["Password"]->ToString(),
+        row["Role"]->ToString(),
+        active);
 }
 
-bool UserDB::createUser(String^ username , String^ password , String^ role)
+bool UserDB::createUser(String^ username, String^ password, String^ role)
 {
-    if ( username->Trim() == "" || password->Trim() == "" ) {
+    if (username->Trim() == "" || password->Trim() == "") {
         MessageBox::Show("Fields cannot be empty.");
         return false;
     }
-    if ( usernameExists(username) ) {
+    if (usernameExists(username)) {
         MessageBox::Show("Username already taken.");
         return false;
     }
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "INSERT INTO Users (Username, Password, Role, IsActive) "
-            "VALUES (@u, @p, @r, @a)" , conn);
-        cmd->Parameters->AddWithValue("@u" , username->Trim());
-        cmd->Parameters->AddWithValue("@p" , password->Trim());
-        cmd->Parameters->AddWithValue("@r" , role);
-        cmd->Parameters->AddWithValue("@a" , true);
-        cmd->ExecuteNonQuery();
-        return true;
-    }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Create error: " + ex->Message);
-        return false;
-    }
-    finally { conn->Close(); }
+    SBS::Database::ExecuteNonQuery(
+        "INSERT INTO Users (Username, Password, Role, IsActive) "
+        "VALUES (@u, @p, @r, @a)",
+        gcnew SqlParameter("@u", username->Trim()),
+        gcnew SqlParameter("@p", password->Trim()),
+        gcnew SqlParameter("@r", role),
+        gcnew SqlParameter("@a", true));
+    return true;
 }
 
 bool UserDB::deleteUser(int userID)
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "DELETE FROM Users WHERE UserID = @id" , conn);
-        cmd->Parameters->AddWithValue("@id" , userID);
-        cmd->ExecuteNonQuery();
-        return true;
-    }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Delete error: " + ex->Message);
-        return false;
-    }
-    finally { conn->Close(); }
+    SBS::Database::ExecuteNonQuery(
+        "DELETE FROM Users WHERE UserID = @id",
+        gcnew SqlParameter("@id", userID));
+    return true;
 }
 
-bool UserDB::setUserActive(int userID , bool status)
+bool UserDB::setUserActive(int userID, bool status)
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "UPDATE Users SET IsActive = @s WHERE UserID = @id" , conn);
-        cmd->Parameters->AddWithValue("@s" , status);
-        cmd->Parameters->AddWithValue("@id" , userID);
-        cmd->ExecuteNonQuery();
-        return true;
-    }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Block error: " + ex->Message);
-        return false;
-    }
-    finally { conn->Close(); }
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Users SET IsActive = @s WHERE UserID = @id",
+        gcnew SqlParameter("@s", status),
+        gcnew SqlParameter("@id", userID));
+    return true;
 }
 
-bool UserDB::changePassword(int userID , String^ oldPass , String^ newPass)
+bool UserDB::changePassword(int userID, String^ oldPass, String^ newPass)
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ checkCmd = gcnew SqlCommand(
-            "SELECT COUNT(*) FROM Users WHERE UserID = @id AND Password = @old" , conn);
-        checkCmd->Parameters->AddWithValue("@id" , userID);
-        checkCmd->Parameters->AddWithValue("@old" , oldPass);
-        int match = ( int ) checkCmd->ExecuteScalar();
-        if ( match == 0 ) {
-            MessageBox::Show("Current password is incorrect.");
-            return false;
-        }
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "UPDATE Users SET Password = @new WHERE UserID = @id" , conn);
-        cmd->Parameters->AddWithValue("@new" , newPass);
-        cmd->Parameters->AddWithValue("@id" , userID);
-        cmd->ExecuteNonQuery();
-        return true;
-    }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Password error: " + ex->Message);
+    Object^ result = SBS::Database::ExecuteScalar(
+        "SELECT COUNT(*) FROM Users WHERE UserID = @id AND Password = @old",
+        gcnew SqlParameter("@id", userID),
+        gcnew SqlParameter("@old", oldPass));
+
+    int match = (result == nullptr) ? 0 : Convert::ToInt32(result);
+    if (match == 0) {
+        MessageBox::Show("Current password is incorrect.");
         return false;
     }
-    finally { conn->Close(); }
+
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Users SET Password = @new WHERE UserID = @id",
+        gcnew SqlParameter("@new", newPass),
+        gcnew SqlParameter("@id", userID));
+    return true;
 }
 
 List<User^>^ UserDB::getAllUsers()
 {
     List<User^>^ users = gcnew List<User^>();
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "SELECT UserID, Username, Password, Role, IsActive FROM Users" , conn);
-        SqlDataReader^ reader = cmd->ExecuteReader();
-        while ( reader->Read() ) {
-            users->Add(gcnew User(
-                ( int ) reader ["UserID"] ,
-                reader ["Username"]->ToString() ,
-                reader ["Password"]->ToString() ,
-                reader ["Role"]->ToString() ,
-                ( bool ) reader ["IsActive"]
-            ));
-        }
+    DataTable^ result = SBS::Database::ExecuteQuery(
+        "SELECT UserID, Username, Password, Role, IsActive FROM Users");
+
+    if (result == nullptr) return users;
+
+    for each (DataRow ^ row in result->Rows) {
+        users->Add(gcnew User(
+            Convert::ToInt32(row["UserID"]),
+            row["Username"]->ToString(),
+            row["Password"]->ToString(),
+            row["Role"]->ToString(),
+            Convert::ToBoolean(row["IsActive"])));
     }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Fetch error: " + ex->Message);
-    }
-    finally { conn->Close(); }
     return users;
 }
 
 bool UserDB::usernameExists(String^ username)
 {
-    SqlConnection^ conn = DatabaseConnection::getConnection();
-    try {
-        conn->Open();
-        SqlCommand^ cmd = gcnew SqlCommand(
-            "SELECT COUNT(*) FROM Users WHERE Username = @u" , conn);
-        cmd->Parameters->AddWithValue("@u" , username->Trim());
-        return ( int ) cmd->ExecuteScalar() > 0;
-    }
-    catch ( Exception^ ex ) {
-        MessageBox::Show("Check error: " + ex->Message);
-        return false;
-    }
-    finally { conn->Close(); }
+    Object^ result = SBS::Database::ExecuteScalar(
+        "SELECT COUNT(*) FROM Users WHERE Username = @u",
+        gcnew SqlParameter("@u", username->Trim()));
+    return (result != nullptr) && (Convert::ToInt32(result) > 0);
+}
+bool UserDB::adminResetPassword(int userID, String^ newPass)
+{
+    SBS::Database::ExecuteNonQuery(
+        "UPDATE Users SET Password = @new WHERE UserID = @id",
+        gcnew SqlParameter("@new", newPass),
+        gcnew SqlParameter("@id", userID));
+    return true;
 }

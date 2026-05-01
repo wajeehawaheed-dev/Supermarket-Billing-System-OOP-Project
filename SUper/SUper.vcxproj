@@ -127,6 +127,7 @@
     </ClInclude>
     <ClInclude Include="BillingForm.h" />
     <ClInclude Include="CartForm.h" />
+    <ClInclude Include="ChangePasswordForm.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="LoginForm.h">
@@ -154,7 +155,10 @@
     <ClInclude Include="ProductsForm.h" />
     <ClInclude Include="SearchProductForm.h" />
     <ClInclude Include="StockAlertForm.h" />
+    <ClInclude Include="UserDB.h" />
+    <ClInclude Include="UserManageForm.h" />
     <ClInclude Include="UserProductView.h" />
+    <ClInclude Include="Users.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -168,6 +172,7 @@
     <ClCompile Include="BestSellersForm.cpp" />
     <ClCompile Include="BillingForm.cpp" />
     <ClCompile Include="CartForm.cpp" />
+    <ClCompile Include="ChangePasswordForm.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
@@ -179,6 +184,9 @@
     <ClCompile Include="product.cpp" />
     <ClCompile Include="ProductForm.cpp" />
     <ClCompile Include="StockAlertForm.cpp" />
+    <ClCompile Include="UserDB.cpp" />
+    <ClCompile Include="UserManageForm.cpp" />
+    <ClCompile Include="Users.cpp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AdminDashboardForm.resx">

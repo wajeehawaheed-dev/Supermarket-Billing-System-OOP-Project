@@ -2,7 +2,7 @@
 #include "Users.h"
 #include "UserDB.h"
 
-namespace UserManagement
+namespace SUper
 {
 
     using namespace System;
@@ -13,6 +13,7 @@ namespace UserManagement
     {
     private:
         User^ loggedInUser;
+        bool adminResetMode;
         Label^ lblTitle;
         Label^ lblOld;
         Label^ lblNew;
@@ -25,11 +26,12 @@ namespace UserManagement
         Button^ btnCancel;
 
     public:
-        ChangePasswordForm(User^ user);
+        ChangePasswordForm(User^ user);                       // self-change (old password required)
+        ChangePasswordForm(User^ user, bool adminReset);      // admin resetting another user (no old password)
 
     private:
         void InitializeComponent();
-        void btnChange_Click(Object^ sender , EventArgs^ e);
-        void btnCancel_Click(Object^ sender , EventArgs^ e);
+        void btnChange_Click(Object^ sender, EventArgs^ e);
+        void btnCancel_Click(Object^ sender, EventArgs^ e);
     };
 }
