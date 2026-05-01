@@ -125,25 +125,26 @@
     <ClInclude Include="BestSellersForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="BillingForm.h" />
+    <ClInclude Include="CartForm.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="PaymentForm.h" >
-<FileType>CppForm</FileType>
-</ClInclude>
-
+    <ClInclude Include="PaymentForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="PaymentMethodForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="ReceiptForm.h" >
-<FileType>CppForm</FileType>
-</ClInclude>
-
+    <ClInclude Include="ReceiptForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="SalesReportForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="SearchForm.h" />
     <ClInclude Include="session.h" />
     <ClInclude Include="SettingsForm.h" />
     <ClInclude Include="shared.h" />
@@ -165,6 +166,8 @@
   <ItemGroup>
     <ClCompile Include="AdminDashboardForm.cpp" />
     <ClCompile Include="BestSellersForm.cpp" />
+    <ClCompile Include="BillingForm.cpp" />
+    <ClCompile Include="CartForm.cpp" />
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
@@ -184,6 +187,8 @@
     <EmbeddedResource Include="BestSellersForm.resx">
       <DependentUpon>BestSellersForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BillingForm.resx" />
+    <EmbeddedResource Include="CartForm.resx" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.h</DependentUpon>
     </EmbeddedResource>

@@ -1,7 +1,7 @@
 #pragma once
 #include "database.h"
 
-namespace SuperMarket {
+namespace SUper {
 
     using namespace System;
     using namespace System::Windows::Forms;
@@ -188,11 +188,14 @@ namespace SuperMarket {
 
             resultGrid->Rows->Clear();
 
-            String^ sql =
-                "SELECT ProductID, Name, Price, Stock FROM Products WHERE Name LIKE '%"
-                + txtSearch->Text->Trim() + "%' AND IsActive = 1 ORDER BY Name";
+            String^ sql = "SELECT ProductID, Name, Price, Stock FROM Products WHERE Name LIKE @q AND IsActive = 1 ORDER BY Name";
+            DataTable^ results = SBS::Database::ExecuteQuery(sql,
+                gcnew System::Data::SqlClient::SqlParameter("@q", "%" + txtSearch->Text->Trim() + "%"));
 
-            DataTable^ results = SBS::Database::ExecuteQuery(sql);
+            if (results == nullptr || results->Rows->Count == 0) {
+                lblStatus->Text = "No products found.";
+                return;
+            }
 
             for (int i = 0; i < results->Rows->Count; i++) {
                 DataRow^ row = results->Rows[i];
@@ -205,8 +208,8 @@ namespace SuperMarket {
                 );
             }
 
-            if (results->Rows->Count > 0)
-                resultGrid->Rows[0]->Selected = true;
+            lblStatus->Text = "Found " + results->Rows->Count + " result(s).";
+            resultGrid->Rows[0]->Selected = true;
         }
 
         // ===== Add =====

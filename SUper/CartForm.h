@@ -1,12 +1,11 @@
 ﻿#pragma once
-#include "Cart.h"
 #include "constants.h"
 #include "BillingForm.h"
 #include "SettingsForm.h"
 #include "database.h"
 #include "SearchForm.h"
 
-namespace SuperMarket {
+namespace SUper {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -21,7 +20,6 @@ namespace SuperMarket {
 		CartForm(String^ role)
 		{
 			InitializeComponent();
-			cart = new Cart();
 			currentRole = role;
 
 			if (currentRole->ToLower() != "admin") {
@@ -46,13 +44,11 @@ namespace SuperMarket {
 		~CartForm()
 		{
 			if (components) delete components;
-			delete cart;
 		}
 
 	private: System::Windows::Forms::Panel^ headerPanel;
 	private: System::Windows::Forms::Label^ lblHeader;
 	private: System::Windows::Forms::DataGridView^ cartGrid;
-	private: Cart* cart;
 	private: String^ currentRole;
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Button^ button2;
@@ -305,9 +301,6 @@ namespace SuperMarket {
 			if (id == -1 || qty <= 0) return;
 			double  total = price * qty;
 			cartGrid->Rows->Add(id, name, price, qty, total);
-			std::string stdName = "";
-			for (int i = 0; i < name->Length; i++) stdName += (char)name[i];
-			cart->addItem(id, stdName, price, qty);
 			UpdateTotals();
 		}
 	}
@@ -326,7 +319,6 @@ namespace SuperMarket {
 
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 		cartGrid->Rows->Clear();
-		cart->clearCart();
 		UpdateTotals();
 	}
 
@@ -334,7 +326,7 @@ namespace SuperMarket {
 		if (cartGrid->Rows->Count <= 1) {
 			MessageBox::Show("Cart is empty! Please add items first.", "Warning"); return;
 		}
-		BillingForm^ billingForm = gcnew BillingForm(cart);
+		BillingForm^ billingForm = gcnew BillingForm(cartGrid);
 		billingForm->ShowDialog();
 	}
 
@@ -353,18 +345,6 @@ namespace SuperMarket {
 				int index = cartGrid->SelectedRows[0]->Index;
 				if (!cartGrid->Rows[index]->IsNewRow) {
 					cartGrid->Rows->RemoveAt(index);
-					cart->clearCart();
-					for (int i = 0; i < cartGrid->Rows->Count; i++) {
-						if (!cartGrid->Rows[i]->IsNewRow) {
-							int     id = Convert::ToInt32(cartGrid->Rows[i]->Cells["colID"]->Value);
-							double  price = Convert::ToDouble(cartGrid->Rows[i]->Cells["colPrice"]->Value);
-							int     qty = Convert::ToInt32(cartGrid->Rows[i]->Cells["colQty"]->Value);
-							String^ name = cartGrid->Rows[i]->Cells["colName"]->Value->ToString();
-							std::string stdName = "";
-							for (int j = 0; j < name->Length; j++) stdName += (char)name[j];
-							cart->addItem(id, stdName, price, qty);
-						}
-					}
 					UpdateTotals();
 				}
 			}

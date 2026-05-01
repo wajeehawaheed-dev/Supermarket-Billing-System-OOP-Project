@@ -72,6 +72,15 @@
     <ClInclude Include="ReceiptForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BillingForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CartForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SearchForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoginForm.cpp">
@@ -113,6 +122,12 @@
     <ClCompile Include="ReceiptForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BillingForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CartForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="schema.sql">
@@ -123,6 +138,12 @@
   <ItemGroup>
     <EmbeddedResource Include="ProductsForm.resx">
       <Filter>Header Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillingForm.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CartForm.resx">
+      <Filter>Resource Files</Filter>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "AdminDashboardForm.h"
 #include "database.h"
 #include "session.h"
+#include "CartForm.h"
 namespace SUper {
 
 	using namespace System;
@@ -233,10 +234,8 @@ private: System::Void btnLogin_Click(System::Object^ sender, System::EventArgs^ 
 		adminForm->ShowDialog();
 	}
 	else {
-		MessageBox::Show("Cashier menu coming soon.\nLogged in as: " + uname,
-			"Cashier Login",
-			MessageBoxButtons::OK,
-			MessageBoxIcon::Information);
+		CartForm^ cartForm = gcnew CartForm(role);
+		cartForm->ShowDialog();
 	}
 
 	txtUsername->Clear();
