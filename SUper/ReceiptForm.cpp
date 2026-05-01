@@ -5,6 +5,7 @@ using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 using namespace System::Data::SqlClient;
+using namespace System::Drawing::Printing;
 using namespace System::Text;
 
 ReceiptForm::ReceiptForm(int billNo) {
@@ -183,12 +184,25 @@ void ReceiptForm::InitializeComponent() {
 
     btnPrint = gcnew Button();
     btnPrint->Text = "Print";
-    btnPrint->Location = System::Drawing::Point(240, 630);
+    btnPrint->Location = System::Drawing::Point(290, 630);
     btnPrint->Size = System::Drawing::Size(100, 35);
     btnPrint->BackColor = Color::FromArgb(34, 139, 34);
     btnPrint->ForeColor = Color::White;
     btnPrint->FlatStyle = FlatStyle::Flat;
     btnPrint->Click += gcnew EventHandler(this, &ReceiptForm::btnPrint_Click);
+
+    btnPreview = gcnew Button();
+    btnPreview->Text = "Preview";
+    btnPreview->Location = System::Drawing::Point(170, 630);
+    btnPreview->Size = System::Drawing::Size(100, 35);
+    btnPreview->BackColor = Color::FromArgb(70, 130, 180);
+    btnPreview->ForeColor = Color::White;
+    btnPreview->FlatStyle = FlatStyle::Flat;
+    btnPreview->Click += gcnew EventHandler(this, &ReceiptForm::btnPreview_Click);
+
+    // Setup PrintDocument
+    printDoc = gcnew PrintDocument();
+    printDoc->PrintPage += gcnew PrintPageEventHandler(this, &ReceiptForm::OnPrintPage);
 
     btnClose = gcnew Button();
     btnClose->Text = "Close";
@@ -203,6 +217,7 @@ void ReceiptForm::InitializeComponent() {
     this->Controls->Add(pnlBody);
     this->Controls->Add(lblThankYou);
     this->Controls->Add(btnPrint);
+    this->Controls->Add(btnPreview);
     this->Controls->Add(btnClose);
 }
 
@@ -276,7 +291,121 @@ void ReceiptForm::LoadReceiptData() {
 }
 
 void ReceiptForm::btnPrint_Click(Object^ sender, EventArgs^ e) {
-    MessageBox::Show("Printing receipt...");
+    PrintDialog^ dialog = gcnew PrintDialog();
+    dialog->Document = printDoc;
+    if (dialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+        try {
+            printDoc->Print();
+        }
+        catch (Exception^ ex) {
+            MessageBox::Show("Printing failed: " + ex->Message,
+                "Print Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+        }
+    }
+}
+
+void ReceiptForm::btnPreview_Click(Object^ sender, EventArgs^ e) {
+    PrintPreviewDialog^ preview = gcnew PrintPreviewDialog();
+    preview->Document = printDoc;
+    preview->Width = 800;
+    preview->Height = 700;
+    preview->ShowDialog();
+}
+
+void ReceiptForm::OnPrintPage(Object^ sender, PrintPageEventArgs^ e) {
+    Graphics^ g = e->Graphics;
+    System::Drawing::Font^ headerFont = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
+    System::Drawing::Font^ subHeaderFont = gcnew System::Drawing::Font("Arial", 10, FontStyle::Italic);
+    System::Drawing::Font^ bodyFont = gcnew System::Drawing::Font("Courier New", 10);
+    System::Drawing::Font^ boldFont = gcnew System::Drawing::Font("Courier New", 10, FontStyle::Bold);
+    System::Drawing::Font^ totalFont = gcnew System::Drawing::Font("Courier New", 12, FontStyle::Bold);
+
+    int x = 50;
+    int y = 50;
+    int pageWidth = e->MarginBounds.Width;
+
+    // Header
+    StringFormat^ centerFormat = gcnew StringFormat();
+    centerFormat->Alignment = StringAlignment::Center;
+    Rectangle headerRect = Rectangle(x, y, pageWidth, 30);
+    g->DrawString("SUPERMARKET", headerFont, Brushes::Black, headerRect, centerFormat);
+    y += 35;
+    Rectangle subRect = Rectangle(x, y, pageWidth, 20);
+    g->DrawString("OFFICIAL RECEIPT", subHeaderFont, Brushes::Black, subRect, centerFormat);
+    y += 30;
+
+    // Divider
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 10;
+
+    // Bill info — strip "Bill No: " prefix from label, take just the values
+    String^ billText = lblBillNo->Text;
+    String^ dateText = lblDate->Text;
+    String^ cashierText = lblCashier->Text;
+
+    g->DrawString(billText, bodyFont, Brushes::Black, x, y);
+    g->DrawString(dateText, bodyFont, Brushes::Black, x + 250, y);
+    y += 20;
+    g->DrawString(cashierText, bodyFont, Brushes::Black, x, y);
+    y += 25;
+
+    // Divider
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 10;
+
+    // Items header
+    g->DrawString("Item                 Qty   Price    Total", boldFont, Brushes::Black, x, y);
+    y += 18;
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 5;
+
+    // Items list — split lblItems text by lines, skip the first 2 (header lines)
+    array<String^>^ lines = lblItems->Text->Split('\n');
+    for (int i = 2; i < lines->Length; i++) {
+        String^ line = lines[i]->TrimEnd();
+        if (line == "" || line == "\r") continue;
+        g->DrawString(line, bodyFont, Brushes::Black, x, y);
+        y += 18;
+    }
+
+    y += 10;
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 10;
+
+    // Totals
+    g->DrawString(lblSubtotal->Text, bodyFont, Brushes::Black, x, y);
+    y += 20;
+    g->DrawString(lblDiscount->Text, bodyFont, Brushes::Black, x, y);
+    y += 20;
+    g->DrawString(lblTax->Text, bodyFont, Brushes::Black, x, y);
+    y += 20;
+
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 10;
+
+    g->DrawString(lblGrandTotal->Text, totalFont, Brushes::Black, x, y);
+    y += 30;
+
+    g->DrawLine(Pens::Black, x, y, x + pageWidth, y);
+    y += 10;
+
+    // Payment
+    g->DrawString(lblPayMethod->Text, bodyFont, Brushes::Black, x, y);
+    y += 20;
+    g->DrawString(lblAmountPaid->Text, bodyFont, Brushes::Black, x, y);
+    y += 20;
+    if (lblChange->Visible) {
+        g->DrawString(lblChange->Text, bodyFont, Brushes::Black, x, y);
+        y += 20;
+    }
+
+    y += 20;
+
+    // Thank you message
+    Rectangle thanksRect = Rectangle(x, y, pageWidth, 25);
+    g->DrawString("Thank you for shopping with us!", subHeaderFont, Brushes::Black, thanksRect, centerFormat);
+
+    e->HasMorePages = false;
 }
 
 void ReceiptForm::btnClose_Click(Object^ sender, EventArgs^ e) {
