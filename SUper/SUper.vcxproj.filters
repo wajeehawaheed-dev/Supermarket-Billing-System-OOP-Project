@@ -66,6 +66,12 @@
     <ClInclude Include="database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PaymentForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReceiptForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoginForm.cpp">
@@ -99,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PaymentForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReceiptForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

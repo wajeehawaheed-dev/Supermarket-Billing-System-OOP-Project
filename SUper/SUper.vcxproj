@@ -130,9 +130,11 @@
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PaymentForm.h" />
     <ClInclude Include="PaymentMethodForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="ReceiptForm.h" />
     <ClInclude Include="SalesReportForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -160,7 +162,9 @@
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="LoginForm.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PaymentForm.cpp" />
     <ClCompile Include="PaymentMethodForm.cpp" />
+    <ClCompile Include="ReceiptForm.cpp" />
     <ClCompile Include="SalesReportForm.cpp" />
     <ClCompile Include="SettingsForm.cpp" />
     <ClCompile Include="product.cpp" />
