@@ -130,11 +130,17 @@
     <ClInclude Include="LoginForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="PaymentForm.h" />
+    <ClInclude Include="PaymentForm.h" >
+<FileType>CppForm</FileType>
+</ClInclude>
+
     <ClInclude Include="PaymentMethodForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="ReceiptForm.h" />
+    <ClInclude Include="ReceiptForm.h" >
+<FileType>CppForm</FileType>
+</ClInclude>
+
     <ClInclude Include="SalesReportForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

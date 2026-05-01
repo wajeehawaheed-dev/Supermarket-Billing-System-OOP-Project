@@ -27,11 +27,11 @@ bool PaymentForm::IsValidExpiryDate(int month, int year) {
 
 void PaymentForm::InitializeComponent() {
     // Colors 
-    Color darkGreen = Color::FromArgb(27, 94, 32);
-    Color medGreen = Color::FromArgb(46, 125, 50);
-    Color lightGreen = Color::FromArgb(232, 245, 233);
-    Color accentGreen = Color::FromArgb(76, 175, 80);
-    Color white = Color::White;
+    System::Drawing::Color darkGreen = Color::FromArgb(27, 94, 32);
+    System::Drawing::Color medGreen = Color::FromArgb(46, 125, 50);
+    System::Drawing::Color lightGreen = Color::FromArgb(232, 245, 233);
+    System::Drawing::Color accentGreen = Color::FromArgb(76, 175, 80);
+    System::Drawing::Color white = Color::White;
 
     this->SuspendLayout();
     this->Text = "Payment";
