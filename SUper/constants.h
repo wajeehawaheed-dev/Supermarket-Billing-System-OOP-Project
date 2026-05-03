@@ -6,3 +6,4 @@ extern double DISCOUNT_RATE_1;
 extern double DISCOUNT_RATE_2;
 extern const char* STORE_NAME;
 
+

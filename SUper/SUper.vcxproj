@@ -119,10 +119,49 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AdminDashboardForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="BestSellersForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="BillHistoryForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="BillingForm.h" />
+    <ClInclude Include="CartForm.h" />
+    <ClInclude Include="ChangePasswordForm.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="database.h" />
+    <ClInclude Include="LoginForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="PaymentForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="PaymentMethodForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="ReceiptForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="SalesReportForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="SearchForm.h" />
     <ClInclude Include="session.h" />
+    <ClInclude Include="SettingsForm.h" />
     <ClInclude Include="shared.h" />
+    <ClInclude Include="AddProductForm.h" />
+    <ClInclude Include="EditProductForm.h" />
+    <ClInclude Include="product.h" />
+    <ClInclude Include="ProductsForm.h" />
+    <ClInclude Include="SearchProductForm.h" />
+    <ClInclude Include="StockAlertForm.h" />
+    <ClInclude Include="UserDB.h" />
+    <ClInclude Include="UserManageForm.h" />
+    <ClInclude Include="UserProductView.h" />
+    <ClInclude Include="Users.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -132,10 +171,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="schema.sql" />
+    <ClCompile Include="AdminDashboardForm.cpp" />
+    <ClCompile Include="BestSellersForm.cpp" />
+    <ClCompile Include="BillHistoryForm.cpp" />
+    <ClCompile Include="BillingForm.cpp" />
+    <ClCompile Include="CartForm.cpp" />
+    <ClCompile Include="ChangePasswordForm.cpp" />
+    <ClCompile Include="constants.cpp" />
+    <ClCompile Include="LoginForm.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PaymentForm.cpp" />
+    <ClCompile Include="PaymentMethodForm.cpp" />
+    <ClCompile Include="ReceiptForm.cpp" />
+    <ClCompile Include="SalesReportForm.cpp" />
+    <ClCompile Include="SettingsForm.cpp" />
+    <ClCompile Include="product.cpp" />
+    <ClCompile Include="ProductForm.cpp" />
+    <ClCompile Include="StockAlertForm.cpp" />
+    <ClCompile Include="UserDB.cpp" />
+    <ClCompile Include="UserManageForm.cpp" />
+    <ClCompile Include="Users.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="constants.cpp" />
+    <EmbeddedResource Include="AdminDashboardForm.resx">
+      <DependentUpon>AdminDashboardForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BestSellersForm.resx">
+      <DependentUpon>BestSellersForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillHistoryForm.resx">
+      <DependentUpon>BillHistoryForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BillingForm.resx" />
+    <EmbeddedResource Include="CartForm.resx" />
+    <EmbeddedResource Include="LoginForm.resx">
+      <DependentUpon>LoginForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentMethodForm.resx">
+      <DependentUpon>PaymentMethodForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SalesReportForm.resx">
+      <DependentUpon>SalesReportForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProductsForm.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="reports.sql" />
+    <None Include="schema.sql" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
