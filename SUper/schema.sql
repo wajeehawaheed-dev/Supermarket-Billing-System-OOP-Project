@@ -99,17 +99,7 @@ INSERT INTO Users (Username, Password, Role) VALUES
     ('admin',   'admin123', 'Admin'),
     ('cashier', 'cashier1', 'Cashier');
 
-INSERT INTO Products (Name, Category, Price, Stock) VALUES
-    ('Milk 1L',        'Dairy',     250.00, 40),
-    ('Bread',          'Bakery',    180.00, 25),
-    ('Eggs (dozen)',   'Dairy',     360.00, 30),
-    ('Rice 5kg',       'Grains',   1500.00, 20),
-    ('Cooking Oil 1L', 'Grocery',   750.00, 15),
-    ('Sugar 1kg',      'Grocery',   220.00, 50),
-    ('Tea 500g',       'Beverages', 850.00,  8),
-    ('Biscuits',       'Snacks',    120.00,  3),
-    ('Shampoo 400ml',  'Personal',  650.00, 12),
-    ('Toothpaste',     'Personal',  180.00, 18);
+
 
 PRINT 'SupermarketDB created. 7 tables, 2 users, 10 products, 7 settings.';
 GO
