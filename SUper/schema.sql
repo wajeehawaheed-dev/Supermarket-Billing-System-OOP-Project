@@ -74,6 +74,7 @@ INSERT INTO Settings (SettingName, SettingValue, Description) VALUES
 CREATE TABLE Payments (
     PaymentID    INT IDENTITY(1,1) PRIMARY KEY,
     BillNo       INT           NOT NULL FOREIGN KEY REFERENCES Bills(BillNo),
+    CustomerName NVARCHAR(100) NULL,
     Method       NVARCHAR(10)  NOT NULL,
     AmountPaid   DECIMAL(10,2) NOT NULL,
     ChangeAmount DECIMAL(10,2) NOT NULL DEFAULT 0,
