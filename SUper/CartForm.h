@@ -328,6 +328,15 @@ namespace SUper {
 		}
 		BillingForm^ billingForm = gcnew BillingForm(cartGrid);
 		billingForm->ShowDialog();
+		cartGrid->Rows->Clear();
+
+		// reset totals to zero
+		lblSubtotal->Text = "Subtotal: Rs 0.00";
+		lblDiscount->Text = "Discount: Rs 0.00";
+		lblTax->Text = "Tax (17%): Rs 0.00";
+		lblGrandTotal->Text = "Grand Total: Rs 0.00";
+
+
 	}
 
 	private: System::Void btnSettings_Click(System::Object^ sender, System::EventArgs^ e) {
