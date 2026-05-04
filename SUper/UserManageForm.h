@@ -5,7 +5,6 @@
 
 namespace SUper
 {
-
     using namespace System;
     using namespace System::Windows::Forms;
     using namespace System::Drawing;
@@ -26,20 +25,21 @@ namespace SUper
         ComboBox^ cmbRole;
         Button^ btnCreate;
         Button^ btnCancel;
-
     public:
         CreateUserForm();
-
     private:
         void InitializeComponent();
-        void btnCreate_Click(Object^ sender , EventArgs^ e);
-        void btnCancel_Click(Object^ sender , EventArgs^ e);
+        void btnCreate_Click(Object^ sender, EventArgs^ e);
+        void btnCancel_Click(Object^ sender, EventArgs^ e);
     };
 
     public ref class UserManagementForm : public Form
     {
     private:
         User^ loggedInUser;
+        bool dragging;
+        Point dragOffset;
+
         System::Windows::Forms::DataGridView^ dgvUsers;
         Button^ btnCreateUser;
         Button^ btnDeleteUser;
@@ -47,34 +47,34 @@ namespace SUper
         Button^ btnUnblockUser;
         Button^ btnRefresh;
         Label^ lblTitle;
-
     public:
         UserManagementForm(User^ user);
-
     private:
         void InitializeComponent();
         void loadUsers();
-
         int getSelectedUserID()
         {
-            if ( dgvUsers->SelectedRows->Count == 0 ) {
+            if (dgvUsers->SelectedRows->Count == 0) {
                 MessageBox::Show("Please select a user first.");
                 return -1;
             }
-            return Int32::Parse(dgvUsers->Rows [dgvUsers->CurrentRow->Index]->Cells [0]->Value->ToString());
+            return Int32::Parse(dgvUsers->Rows[dgvUsers->CurrentRow->Index]->Cells[0]->Value->ToString());
         }
-
         String^ getSelectedUsername()
         {
-            if ( dgvUsers->SelectedRows->Count == 0 ) return "";
-            return dgvUsers->Rows [dgvUsers->CurrentRow->Index]->Cells [1]->Value->ToString();
+            if (dgvUsers->SelectedRows->Count == 0) return "";
+            return dgvUsers->Rows[dgvUsers->CurrentRow->Index]->Cells[1]->Value->ToString();
         }
-
-        void btnCreateUser_Click(Object^ sender , EventArgs^ e);
+        void btnCreateUser_Click(Object^ sender, EventArgs^ e);
         void btnChangePassword_Click(Object^ sender, EventArgs^ e);
-        void btnDeleteUser_Click(Object^ sender , EventArgs^ e);
-        void btnBlockUser_Click(Object^ sender , EventArgs^ e);
-        void btnUnblockUser_Click(Object^ sender , EventArgs^ e);
-        void btnRefresh_Click(Object^ sender , EventArgs^ e);
+        void btnDeleteUser_Click(Object^ sender, EventArgs^ e);
+        void btnBlockUser_Click(Object^ sender, EventArgs^ e);
+        void btnUnblockUser_Click(Object^ sender, EventArgs^ e);
+        void btnRefresh_Click(Object^ sender, EventArgs^ e);
+        void btnTopClose_Click(Object^ sender, EventArgs^ e);
+        void dgvUsers_CellFormatting(Object^ sender, DataGridViewCellFormattingEventArgs^ e);
+        void Form_MouseDown(Object^ sender, MouseEventArgs^ e);
+        void Form_MouseMove(Object^ sender, MouseEventArgs^ e);
+        void Form_MouseUp(Object^ sender, MouseEventArgs^ e);
     };
 }
