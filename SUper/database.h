@@ -12,7 +12,6 @@ namespace SBS {
             return "Server=localhost\\SQLEXPRESS;"
                 "Database=SupermarketDB;"
                 "Trusted_Connection=True;"
-                "TrustServerCertificate=True;";
         }
 
         static int ExecuteNonQuery(String^ sql) {
