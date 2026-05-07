@@ -44,6 +44,16 @@ namespace SUper {
         void btnPreview_Click(Object^ sender, EventArgs^ e);
         void btnClose_Click(Object^ sender, EventArgs^ e);
         void OnPrintPage(Object^ sender, PrintPageEventArgs^ e);
+
+        // ===== New for modern styling =====
+        void pnlBody_Paint(Object^ sender, PaintEventArgs^ e);
+        void btnPrint_MouseEnter(Object^ sender, EventArgs^ e);
+        void btnPrint_MouseLeave(Object^ sender, EventArgs^ e);
+        void btnPreview_MouseEnter(Object^ sender, EventArgs^ e);
+        void btnPreview_MouseLeave(Object^ sender, EventArgs^ e);
+        void btnClose_MouseEnter(Object^ sender, EventArgs^ e);
+        void btnClose_MouseLeave(Object^ sender, EventArgs^ e);
+
     private: System::Void ReceiptForm_Load(System::Object^ sender, System::EventArgs^ e) {
     }
     };
