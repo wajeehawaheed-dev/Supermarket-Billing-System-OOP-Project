@@ -100,7 +100,7 @@ INSERT INTO Users (Username, Password, Role) VALUES
     ('admin',   'admin123', 'Admin'),
     ('cashier', 'cashier1', 'Cashier');
 
-
+    UPDATE Products SET Stock = 0 WHERE Stock < 0;
 
 PRINT 'SupermarketDB created. 7 tables, 2 users, 10 products, 7 settings.';
 GO
