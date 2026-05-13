@@ -14,8 +14,8 @@ namespace SUper {
 
     public ref class AddProductForm : public Form {
     private:
-        static Color NAVY;
-        static Color NAVY_HOVER;
+        static Color NAVY;          //Static means: belongs to the class, not any individual object, Static constructor runs once when the class is first used
+        static Color NAVY_HOVER;    //used here to initialize color constants that never change.
         static Color GREEN_BTN;
         static Color GREEN_BTN_HOVER;
         static Color BG_LIGHT;
@@ -253,6 +253,23 @@ namespace SUper {
             if (!Int32::TryParse(txtStock->Text, stock) || stock < 0) {
                 MessageBox::Show("Enter a valid stock quantity."); return;
             }
+
+            //Validation check for duplicates
+            // check if product with same name already exists
+            Object^ exists = SBS::Database::ExecuteScalar(
+                "SELECT COUNT(*) FROM Products WHERE Name = @n AND IsActive = 1",
+                gcnew SqlParameter("@n", txtName->Text->Trim()));
+
+            if (Convert::ToInt32(exists) > 0) {
+                MessageBox::Show(
+                    "A product with this name already exists!",
+                    "Duplicate Product",
+                    MessageBoxButtons::OK,
+                    MessageBoxIcon::Warning);
+                return;
+            }
+
+            
             pm->addToDB(txtName->Text->Trim(), txtCategory->Text->Trim(), price, stock);
             MessageBox::Show("Product added successfully!", "Success",
                 MessageBoxButtons::OK, MessageBoxIcon::Information);
