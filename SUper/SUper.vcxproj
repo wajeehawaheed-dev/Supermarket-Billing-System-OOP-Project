@@ -145,6 +145,8 @@
     <ClInclude Include="ReceiptForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="SalesReportForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -218,6 +220,12 @@
   <ItemGroup>
     <None Include="reports.sql" />
     <None Include="schema.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SUper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ValueMart ICON.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
