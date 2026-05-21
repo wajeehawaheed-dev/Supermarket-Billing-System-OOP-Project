@@ -414,10 +414,14 @@ namespace SUper {
                 dgvProducts->Columns["Price"]->DefaultCellStyle->Format = "N2";
                 dgvProducts->Columns["Price"]->DefaultCellStyle->Alignment =
                     DataGridViewContentAlignment::MiddleRight;
+                dgvProducts->Columns["Price"]->HeaderCell->Style->Alignment =
+                    DataGridViewContentAlignment::MiddleRight;
                 dgvProducts->Columns["Price"]->HeaderText = "Price (Rs.)";
             }
             if (dgvProducts->Columns->Contains("Stock")) {
                 dgvProducts->Columns["Stock"]->DefaultCellStyle->Alignment =
+                    DataGridViewContentAlignment::MiddleCenter;
+                dgvProducts->Columns["Stock"]->HeaderCell->Style->Alignment =
                     DataGridViewContentAlignment::MiddleCenter;
                 dgvProducts->Columns["Stock"]->DefaultCellStyle->Font =
                     gcnew System::Drawing::Font("Segoe UI", 9.5F, FontStyle::Bold);
