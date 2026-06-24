@@ -11,7 +11,7 @@ namespace SBS {
         static String^ GetConnectionString() {
             return "Server=localhost\\SQLEXPRESS;"
                 "Database=SupermarketDB;"
-                "Trusted_Connection=True;"
+                "Trusted_Connection=True;";
         }
 
         static int ExecuteNonQuery(String^ sql) {
