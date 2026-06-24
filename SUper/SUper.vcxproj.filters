@@ -191,5 +191,8 @@
     <Image Include="ValueMart ICON.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

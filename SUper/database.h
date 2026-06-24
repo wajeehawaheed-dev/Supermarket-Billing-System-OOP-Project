@@ -9,9 +9,9 @@ namespace SBS {
     public ref class Database {
     public:
         static String^ GetConnectionString() {
-            return "Server=(local)\\SQLEXPRESS;"
+            return "Server=localhost\\SQLEXPRESS;"
                 "Database=SupermarketDB;"
-                "Integrated Security=True;";
+                "Trusted_Connection=True;";
         }
 
         static int ExecuteNonQuery(String^ sql) {
